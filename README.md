@@ -1,30 +1,34 @@
-# Imóveis em Movimento — Guilherme Augusto
+# Imóveis em Movimento — Portfólio Guilherme Augusto
 
-Portfólio comercial e estúdio demonstrativo de vídeos imobiliários.
+Site demonstrativo para produção de apresentações imobiliárias com fotografias, vídeos animados e páginas individuais para imóveis.
 
-## Funcionalidades
-- Site responsivo com apresentação de serviços e exemplos ilustrativos de imóveis.
-- Página individual demonstrativa de imóvel.
-- Estúdio local: escolha de fotos, nome, descrição, formato horizontal/vertical e duração.
-- Vídeo em WebM criado no próprio navegador, sem upload de fotos.
-- HTML semântico, CSS e JavaScript separados.
-- Pronto para hospedagem estática na Cloudflare Pages.
+## Páginas
+- `index.html` — apresentação comercial e acesso rápido.
+- `imoveis.html` — vitrine pesquisável de imóveis demonstrativos e cadastrados neste navegador.
+- `videos.html` — três apresentações animadas prontas para assistir, criadas a partir de sequências de fotografias ilustrativas.
+- `cadastrar.html` — painel de cadastro e edição, salvando informações e imagens localmente com IndexedDB.
+- `imovel.html?id=aurora` — página detalhada dinâmica de cada imóvel.
+- `estudio.html` — gerador local de arquivo WebM com fotos reais, formatos horizontal e vertical.
 
-## Teste local
-Abra o projeto com um servidor estático (ex.: extensão Live Server do VS Code), e acesse `index.html`. No estúdio, o Chrome ou Edge atual é recomendado para exportação WebM.
+## Estado atual e limitações importantes
+- Os cadastros são uma **demonstração local**: ficam no IndexedDB do navegador em que foram criados; não aparecem para outros usuários ou dispositivos. O painel não tem login e não deve receber dados confidenciais. A próxima fase inclui Cloudflare D1, R2 e proteção de administração.
+- As três apresentações em `videos.html` são **prévias visuais animadas no navegador** (não arquivos MP4 de filmagem) e usam fotos ilustrativas externas. Elas representam o estilo de apresentação que podemos produzir.
+- O estúdio exporta WebM em navegadores que suportam `MediaRecorder`. Não há API Claude nem renderização automática MP4 integrada.
+- Nenhum imóvel demonstrativo está à venda; preços, metragens e endereços não são factuais.
 
-## Publicação via Cloudflare Pages
-1. Abra **Workers & Pages > Create > Pages > Connect to Git**.
-2. Escolha `Guilherme-code10/portfolio-imoveis-em-movimento`.
-3. Framework preset: **None**.
-4. Build command: **(vazio)**.
-5. Build output directory: **/** (raiz do repositório; se o painel pedir, use `.`).
-6. Confirme o deploy e abra a URL **pages.dev** atribuída pelo painel.
+## Testar localmente
+Use o Live Server no VS Code ou um servidor estático, ex. `python -m http.server 8000`. Abra `http://localhost:8000`.
+Teste: três vídeos em `videos.html`, cadastro com fotografias em `cadastrar.html`, visualização em `imoveis.html`, detalhes em `imovel.html`, e criação de WebM em `estudio.html`.
 
-## Próximas fases
-- Upload autenticado, Cloudflare R2, painel administrativo e aprovação de vídeos.
-- Renderização de MP4 por serviço remoto, com chaves restritas ao backend.
-- Opcional: API Claude para apoio a roteiros, sem lhe atribuir renderização de vídeos.
+## Cloudflare Pages
+Repositório: Guilherme-code10/portfolio-imoveis-em-movimento.
+Vincular a branch `main`; framework preset None; build command vazio; output directory `/` ou `.`. Atualizações em main são publicadas automaticamente se a integração Git estiver ativa.
 
-## Notas
-As fotos de demonstração vêm de imagens ilustrativas externas (Unsplash), não representam imóveis reais em anúncio ou trabalhos de clientes. Antes de uso comercial, substitua por mídia própria/autorizada e configure os dados de contato. Esta versão não cobra pagamentos nem envia arquivos para servidores.
+## Próxima fase
+1. Banco de dados Cloudflare D1 para cadastros compartilhados.
+2. Cloudflare R2 para fotos e vídeos.
+3. Login de administrador, permissões e aprovação antes de publicação.
+4. Fila de renderização MP4, webhooks, custos e limites.
+5. Opcional: API Claude para assistência de roteiros (não como renderizador de vídeo).
+
+As mídias ilustrativas são fotografias externas de referência. Para uso comercial e trabalhos reais, substitua por fotos próprias ou com autorização e confirme as licenças dos materiais.
