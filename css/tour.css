@@ -95,3 +95,14 @@
 .real-house-links a:hover{background:#dcebdd}
 @media(max-width:1200px){.real-house-info{grid-template-columns:repeat(3,minmax(0,1fr))}.real-house-info>div:first-child{grid-column:1/-1}}
 @media(max-width:580px){.real-house-info{grid-template-columns:repeat(2,minmax(0,1fr))}.real-house-info>div:first-child{grid-column:1/-1}.real-house-info strong{font-size:19px}.real-house-links{flex-direction:column}.real-house-links a{text-align:center}}
+
+.tour-hero-outline{background:radial-gradient(ellipse at 78% 22%,#52765c,#264432 48%,#0a2317);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:30px;border:1px solid #68927480;isolation:isolate}
+.tour-hero-outline:before,.tour-hero-outline:after{content:"";position:absolute;border:1px solid rgba(227,242,227,.18);transform:rotate(-29deg);pointer-events:none}
+.tour-hero-outline:before{width:220px;height:220px;border-radius:23px;top:22px;right:-55px}
+.tour-hero-outline:after{width:180px;height:180px;border-radius:20px;bottom:8px;left:-70px}
+.tour-house-wireframe{font-family:Georgia,serif;font-size:180px;line-height:1;color:#d3e4ca;opacity:.82;transform:translateY(-5px)}
+.tour-hero-real-title{text-align:center;position:relative;z-index:2;margin-top:-23px;padding-bottom:55px;color:#fff}
+.tour-hero-real-title span{font-size:9px;letter-spacing:.17em;color:#cdd9c9}
+.tour-hero-real-title strong{display:block;font:600 clamp(23px,3vw,31px) Manrope,sans-serif;letter-spacing:-.045em;margin:13px 0 2px}
+.tour-hero-real-title small{font-size:12px;color:#cbdaca}
+@media(max-width:730px){.tour-house-wireframe{font-size:130px}.tour-hero-real-title{padding-bottom:35px}}
