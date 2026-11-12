@@ -40,3 +40,13 @@ As mídias ilustrativas são fotografias externas de referência. Para uso comer
 - As setas locais conectam imagens na ordem do upload, em posições iniciais exemplificativas, e **não mapeiam passagens reais**; para isso é necessário capturar panorama por cômodo e configurar hotspots com a geometria correta.
 - URL do tour externo usada no exemplo: https://my.matterport.com/show/?m=U2qqEaNwtwb (documentada em material oficial de demonstração; a disponibilidade depende do proprietário e da plataforma).
 - Motor Pannellum: https://pannellum.org/ (MIT). Seus exemplos panorâmicos podem ter licença CC BY-SA; não estamos hospedando ou redistribuindo tais imagens.
+
+## Caso real de teste (12 nov 2026)
+A demonstração principal em `tour-virtual.html` agora apresenta uma propriedade **existente**, com anúncio público verificado:
+- Casa: 4 Herberton Road, South Ripley, Queensland, Austrália.
+- Comercialização: Ray White Ipswich, portal Domain.
+- Dados do anúncio: 4 quartos, 2 banheiros, 2 vagas, 209 m² construídos e terreno de 392 m².
+- Anúncio original: https://www.domain.com.au/4-herberton-road-south-ripley-qld-4306-2021295007
+- Passeio 3D incluído no anúncio: https://my.matterport.com/show/?m=ovWEMMzTD2V
+- O embed Matterport está identificado como **externo, não produzido por nós**. Não há cópias de fotografias ou panoramas do anúncio hospedadas neste repositório.
+- Para integrar tours próprios, capte imagens 360° autorizadas ou use um escaneamento 3D com permissão do proprietário e direitos sobre os arquivos. Fotos 2D convencionais não geram reconstrução fiel automaticamente.

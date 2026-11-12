@@ -21,7 +21,7 @@
 .matterport-box{position:relative;aspect-ratio:16/9;background:#122a1d;border-radius:24px;overflow:hidden;box-shadow:0 29px 80px rgba(15,47,26,.13)}
 .matterport-box iframe{width:100%;height:100%;position:absolute;inset:0;border:none}
 .matterport-intro{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:white;padding:25px}
-.matterport-bg{position:absolute;inset:0;background:linear-gradient(#092115bb,#092115e3),url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=75') center/cover}
+.matterport-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 28%,#466752,#152f21 55%,#081c13)}
 .matterport-instructions{position:relative;z-index:1;max-width:560px;display:flex;flex-direction:column;align-items:center;gap:16px}
 .tour-kicker{font-size:11px;letter-spacing:.22em;color:#d6be9b}
 .matterport-instructions strong{font:600 clamp(26px,4vw,45px)/1.2 Manrope,sans-serif;letter-spacing:-.04em}
@@ -80,3 +80,18 @@
 .tour-preview-stage .pnlm-scene .pnlm-hotspot{cursor:pointer}
 @media(max-width:1010px){.tour-hero-grid{gap:35px}.tour-builder-grid{grid-template-columns:1fr}.tour-preview-stage{height:480px}}
 @media(max-width:730px){.tour-hero{padding:65px 0;border-radius:0 0 24px 24px}.tour-hero-grid{grid-template-columns:1fr}.tour-hero-art{height:290px;border-radius:20px 60px 20px 20px}.tour-hero h1{font-size:clamp(48px,10vw,65px)}.tour-section-top{flex-direction:column;gap:13px}.tour-demo{padding:70px 0 85px}.tour-builder{padding:75px 0 80px}.tour-benefits{grid-template-columns:1fr}.tour-next{padding:75px 0 85px}.tour-below{font-size:11px}.tour-tag{white-space:normal}.matterport-box{aspect-ratio:4/5}.matterport-instructions strong{font-size:27px}.tour-form,.tour-preview{padding:19px}.tour-preview-stage{height:370px}.tour-preview-head{flex-wrap:wrap}.tour-preview-footer{align-items:start;flex-direction:column}.tour-hero-actions{align-items:start;flex-direction:column}}
+
+/* Ficha de imovel autentico: sem fotografia ilustrativa na capa do tour real */
+.real-house-info{display:grid;grid-template-columns:minmax(210px,2.1fr) repeat(5,minmax(94px,1fr));gap:13px;margin:25px 0 23px}
+.real-house-info>div{padding:19px 15px;border:1px solid #dde6d9;border-radius:15px;background:#f6f8f4}
+.real-house-info>div:first-child{background:#153c27;border-color:#153c27;color:#fff}
+.real-house-info span{display:block;font-size:9px;color:#6e806d;letter-spacing:.11em;font-weight:700;margin-bottom:11px}
+.real-house-info>div:first-child span{color:#c8d7c7}
+.real-house-info strong{display:block;font:600 21px Manrope,sans-serif;letter-spacing:-.04em;white-space:nowrap}
+.real-house-info>div:first-child strong{font-size:23px;white-space:normal}
+.real-house-info small{font-size:10px;color:#d2e0cf}
+.real-house-links{display:flex;flex-wrap:wrap;gap:13px;margin-top:20px}
+.real-house-links a{display:inline-block;font-size:13px;font-weight:700;color:#1f5331;background:#edf4eb;border:1px solid #d5e2d2;padding:13px 18px;border-radius:999px;transition:background .2s}
+.real-house-links a:hover{background:#dcebdd}
+@media(max-width:1200px){.real-house-info{grid-template-columns:repeat(3,minmax(0,1fr))}.real-house-info>div:first-child{grid-column:1/-1}}
+@media(max-width:580px){.real-house-info{grid-template-columns:repeat(2,minmax(0,1fr))}.real-house-info>div:first-child{grid-column:1/-1}.real-house-info strong{font-size:19px}.real-house-links{flex-direction:column}.real-house-links a{text-align:center}}
