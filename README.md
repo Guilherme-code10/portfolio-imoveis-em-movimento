@@ -50,3 +50,6 @@ A demonstração principal em `tour-virtual.html` agora apresenta uma propriedad
 - Passeio 3D incluído no anúncio: https://my.matterport.com/show/?m=ovWEMMzTD2V
 - O embed Matterport está identificado como **externo, não produzido por nós**. Não há cópias de fotografias ou panoramas do anúncio hospedadas neste repositório.
 - Para integrar tours próprios, capte imagens 360° autorizadas ou use um escaneamento 3D com permissão do proprietário e direitos sobre os arquivos. Fotos 2D convencionais não geram reconstrução fiel automaticamente.
+
+## Link do tour Matterport no cadastro (modo local)
+O cadastro `cadastrar.html` agora aceita, opcionalmente, URL pública de modelo Matterport com hostname exato `my.matterport.com`, caminho `/show/` e ID alfanumérico de 11 caracteres. É guardada somente a URL no IndexedDB; a prévia no imóvel carrega o iframe após interação explícita. Links não autorizados não devem ser inseridos. O cadastro completo ainda depende de uma foto de capa autorizada.
