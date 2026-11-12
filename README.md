@@ -32,3 +32,11 @@ Vincular a branch `main`; framework preset None; build command vazio; output dir
 5. Opcional: API Claude para assistência de roteiros (não como renderizador de vídeo).
 
 As mídias ilustrativas são fotografias externas de referência. Para uso comercial e trabalhos reais, substitua por fotos próprias ou com autorização e confirme as licenças dos materiais.
+
+## Visita virtual 360° — nova demonstração
+- `tour-virtual.html` — exemplo **externo** de tour 3D Matterport, atribuído claramente ao serviço e ao autor, carregado somente após o visitante clicar em "Iniciar passeio".
+- A mesma página oferece um visualizador próprio usando Pannellum (MIT), com upload **local** de 2 a 8 fotos equiretangulares 360°, ajuste do nome dos cômodos e navegação por setas/hotspots.
+- Os arquivos do usuário **não são enviados** ao servidor. Não há gravação persistente de tours, login, planta baixa real ou medição do imóvel.
+- As setas locais conectam imagens na ordem do upload, em posições iniciais exemplificativas, e **não mapeiam passagens reais**; para isso é necessário capturar panorama por cômodo e configurar hotspots com a geometria correta.
+- URL do tour externo usada no exemplo: https://my.matterport.com/show/?m=U2qqEaNwtwb (documentada em material oficial de demonstração; a disponibilidade depende do proprietário e da plataforma).
+- Motor Pannellum: https://pannellum.org/ (MIT). Seus exemplos panorâmicos podem ter licença CC BY-SA; não estamos hospedando ou redistribuindo tais imagens.

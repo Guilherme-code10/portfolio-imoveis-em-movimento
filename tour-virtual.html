@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102920">
+<meta name="description" content="Entre em um imóvel virtualmente. Conheça uma demonstração externa de passeio 3D e crie um tour 360° usando panoramas autorizados.">
+<title>Tour Virtual 360° | Imóveis em Movimento</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/showcase.css">
+<link rel="stylesheet" href="css/tour.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css">
+<script defer src="js/app.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
+<script defer src="js/tour.js"></script></head>
+<body>
+<a class="skip" href="#main">Ir ao conteúdo</a>
+<div class="announcement">IMÓVEIS EM MOVIMENTO · UMA EXPERIÊNCIA DE VISITA VIRTUAL</div>
+<header class="nav-shell"><div class="wrap nav">
+<a href="index.html" class="logo" aria-label="Início">GA<span>.</span><small>IMÓVEIS EM MOVIMENTO</small></a>
+<button class="menu-toggle" aria-label="Abrir navegação" aria-expanded="false">☰</button>
+<nav class="nav-links" aria-label="Navegação principal">
+<a href="index.html">Início</a><a href="imoveis.html">Imóveis</a><a href="videos.html">Vídeos</a><a href="tour-virtual.html" aria-current="page">Tour 360°</a><a href="estudio.html">Estúdio</a><a href="cadastrar.html" class="nav-cta">Cadastrar imóvel ↗</a>
+</nav></div></header>
+<main id="main">
+<section class="tour-hero">
+<div class="wrap tour-hero-grid">
+<div><div class="eyebrow light">NAVEGUE · OLHE AO REDOR · EXPLORE</div>
+<h1>Não apenas veja. <em>Entre na casa.</em></h1>
+<p>Uma experiência parecida com o Street View: olhe ao redor, clique nos pontos de navegação e explore o imóvel como se estivesse lá.</p>
+<div class="tour-hero-actions"><a class="btn btn-light" href="#demonstracao">Experimentar tour 3D ↗</a><a class="tour-text-link" href="#meu-tour">Criar demonstração 360° ↓</a></div>
+</div><div class="tour-hero-art"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1100&q=85" alt="Interior ilustrativo de casa moderna"><div class="tour-hero-lens"><span>↔</span> EXPLORE EM 360°</div></div>
+</div>
+</section>
+<section class="wrap tour-demo" id="demonstracao">
+<div class="tour-section-top"><div><div class="eyebrow">01 / TESTE A EXPERIÊNCIA</div><h2>Entre e <em>caminhe virtualmente.</em></h2><p>O exemplo abaixo é um tour 3D externo da Matterport, divulgado em seu material de demonstração. Não foi criado por nós e não pertence ao nosso portfólio de imóveis.</p></div><div class="tour-tag">EXEMPLO EXTERNO · MATTERPORT</div></div>
+<div class="matterport-box">
+<div class="matterport-intro" id="matterport-intro">
+<div class="matterport-bg"></div>
+<div class="matterport-instructions"><span class="tour-kicker">UMA CASA REAL EM 3D</span><strong>Explore a propriedade por dentro</strong><p>Clique para carregar a experiência externa. Depois, arraste para olhar ao redor e clique nos círculos no chão para avançar.</p><button type="button" id="load-matterport" class="btn btn-light">Iniciar passeio 3D <span>↗</span></button><small>Ao iniciar, o visualizador da Matterport será carregado. Sua disponibilidade depende do serviço externo.</small></div>
+</div>
+<iframe id="matterport-frame" title="Tour demonstrativo 3D externo fornecido pela Matterport" allow="fullscreen; xr-spatial-tracking" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" hidden></iframe>
+</div>
+<div class="tour-below"><span><strong>↔</strong> Arraste para olhar em volta</span><span><strong>⌖</strong> Clique nos círculos no chão para caminhar</span><span><strong>▣</strong> Experimente a visão da casa inteira</span></div>
+<p class="tour-disclaimer">Caso o passeio não carregue aqui, <a href="https://my.matterport.com/show/?m=U2qqEaNwtwb" target="_blank" rel="noopener noreferrer">abra a demonstração original da Matterport ↗</a>. O modelo pertence ao seu respectivo autor e não representa um imóvel cadastrado no nosso sistema.</p>
+</section>
+<section id="meu-tour" class="tour-builder"><div class="wrap">
+<div class="tour-section-top"><div><div class="eyebrow">02 / NOSSO PRÓPRIO VISUALIZADOR</div><h2>Crie um tour <em>com seus ambientes.</em></h2><p>Suba de 2 a 8 imagens panorâmicas 360° da mesma casa. A prévia permite girar a visão e trocar de cômodo pelas setas e pelos botões de navegação.</p></div><div class="tour-tag">PRÉVIA LOCAL · SEM LOGIN</div></div>
+<div class="tour-builder-grid">
+<form id="tour-form" class="tour-form">
+<div class="tour-form-title"><span>PASSO 01</span><h3>Adicione as fotos panorâmicas</h3></div>
+<label for="tour-name">Nome do projeto</label><input id="tour-name" maxlength="60" placeholder="Ex.: Casa no Jardim Maia" value="Tour demonstrativo">
+<label for="tour-files">Panoramas do imóvel</label>
+<div class="tour-upload"><input id="tour-files" type="file" multiple accept="image/jpeg,image/png,image/webp" aria-describedby="tour-hint"><div class="tour-upload-icon">＋</div><strong>Selecionar fotos 360°</strong><small id="tour-hint">De 2 a 8 imagens panorâmicas JPG, PNG ou WebP · até 18 MB cada · proporção próxima de 2:1</small></div>
+<div id="tour-files-list" class="tour-files-list" aria-live="polite"></div>
+<button class="btn btn-dark tour-build-btn" type="submit" id="tour-build" disabled>Montar meu passeio 360° ↗</button>
+<p id="tour-status" role="status" aria-live="polite">Adicione pelo menos 2 fotos panorâmicas para começar.</p>
+<div class="tour-help"><strong>Importante</strong><p>Fotos comuns de anúncios não permitem caminhar pela casa com fidelidade. Para esse resultado, precisamos de fotografias 360° feitas em pontos diferentes dos ambientes ou de um escaneamento 3D. As setas desta prévia ligam cômodos na ordem escolhida; não representam um mapa arquitetônico real.</p></div>
+</form>
+<div class="tour-preview">
+<div class="tour-preview-head"><div><small>PASSO 02 / VISUALIZAÇÃO</small><h3>Seu passeio 360°</h3></div><span id="tour-preview-badge">AGUARDANDO IMAGENS</span></div>
+<div class="tour-preview-stage">
+<div id="local-panorama" aria-label="Panorama virtual interativo"></div>
+<div class="tour-preview-empty" id="tour-preview-empty"><span class="tour-empty-icon">◌</span><strong>Seu imóvel começa aqui.</strong><p>Selecione panoramas 360° para montar a experiência.</p></div>
+</div>
+<div id="tour-room-list" class="tour-room-list" aria-label="Selecionar ambiente" hidden></div>
+<div class="tour-preview-footer"><span id="tour-current-room">Prévia local no seu navegador</span><button id="tour-fullscreen" type="button" disabled>Expandir visualização ⛶</button></div>
+</div>
+</div>
+</div></section>
+<section class="wrap tour-next">
+<div class="eyebrow">O QUE VEM DEPOIS</div><h2>De uma visita em 360° <em>a um produto imobiliário completo.</em></h2>
+<div class="tour-benefits"><article><span>01</span><h3>Tour por imóvel</h3><p>Cada propriedade poderá ter sua própria visita virtual e galeria.</p></article><article><span>02</span><h3>Navegação por ambientes</h3><p>Setas configuradas na posição correta após captar os panoramas reais.</p></article><article><span>03</span><h3>Painel na nuvem</h3><p>Fotos armazenadas com segurança, revisão e publicação pelo administrador.</p></article></div>
+</section></main>
+<footer><div class="wrap footer-row"><a href="index.html" class="logo footer-logo">GA<span>.</span><small>IMÓVEIS EM MOVIMENTO</small></a><span>© <span data-year></span> Guilherme Augusto · Projeto demonstrativo</span><a href="imoveis.html">Ver imóveis ↗</a></div></footer>
+</body></html>
