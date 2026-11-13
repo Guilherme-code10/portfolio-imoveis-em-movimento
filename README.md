@@ -64,3 +64,6 @@ O cadastro `cadastrar.html` agora aceita, opcionalmente, URL pública de modelo 
 
 ## Correção de escopo / 13 nov 2026
 A prévia anterior da Cabral, baseada numa única fotografia, foi removida dos destaques. A URL `cabral-ponte-grande.html` agora informa claramente que o passeio do imóvel **não existe ainda** e exige panoramas 360° ou um escaneamento 3D autorizados. O site mantém demonstração externa identificada de uma **outra** casa real em `tour-virtual.html`. O vídeo de uma foto não cumpre o objetivo de caminhar pelos cômodos.
+
+## 13 nov 2026 — recurso experimental não divulgado
+A navegação pública e os destaques deixaram de promover o `tour-virtual.html`, porque o fluxo de captação de panorama e produção de tour próprio ainda não foi validado. A página de demonstração e seu código permanecem acessíveis por endereço direto somente para desenvolvimento. NÃO apresentar a demo Matterport de terceiros como serviço próprio. Próximo teste: captar de 2 a 4 panoramas 360° autorizados de uma única casa e verificar a transição entre cenas; depois desenvolver implantação em R2/D1 e habilitar o recurso ao público.

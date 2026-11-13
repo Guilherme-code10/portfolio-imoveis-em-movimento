@@ -195,3 +195,7 @@
 .cabral-feature .btn{white-space:nowrap}
 .cabral-feature-video{margin-top:45px;margin-bottom:0}
 @media(max-width:710px){.cabral-feature{padding:23px;flex-direction:column;align-items:flex-start;gap:20px}.cabral-feature .btn{width:100%;justify-content:center}.cabral-feature-video{margin-top:25px}}
+
+/* Ajuste de fase: somente tres atalhos operacionais enquanto o tour imersivo nao estiver pronto */
+.quick-paths{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:780px){.quick-paths{grid-template-columns:1fr}}
