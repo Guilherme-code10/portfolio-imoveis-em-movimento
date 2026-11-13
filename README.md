@@ -61,3 +61,6 @@ O cadastro `cadastrar.html` agora aceita, opcionalmente, URL pública de modelo 
 - Outra galeria do mesmo anúncio: https://www.chavesnamao.com.br/imovel/casa-a-venda-2-quartos-com-garagem-sp-guarulhos-ponte-grande-338m2-RS1190000/id-44616697/
 - Uma imagem da garagem é carregada diretamente do portal Chaves na Mão com crédito, sem repositório de cópias; o portal poderá bloquear o hotlink. Os direitos autorais pertencem aos titulares. Uso comercial e arquivo MP4 dependem de fotografias obtidas com permissão.
 - Para completar o vídeo real é necessário obter as imagens dos outros ambientes, autorização de uso e, para tour imersivo fiel, panoramas 360° ou escaneamento 3D.
+
+## Correção de escopo / 13 nov 2026
+A prévia anterior da Cabral, baseada numa única fotografia, foi removida dos destaques. A URL `cabral-ponte-grande.html` agora informa claramente que o passeio do imóvel **não existe ainda** e exige panoramas 360° ou um escaneamento 3D autorizados. O site mantém demonstração externa identificada de uma **outra** casa real em `tour-virtual.html`. O vídeo de uma foto não cumpre o objetivo de caminhar pelos cômodos.
