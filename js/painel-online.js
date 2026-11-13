@@ -32,7 +32,7 @@ function reset(){
 }
 function edit(p){
  reset();editId=p.id;
- for(const key of ["title","type","purpose","status","price","city","uf","neighborhood","lat","lng","rooms","baths","parking","area","description"]){
+ for(const key of ["title","type","purpose","status","price","cep","street","number","complement","city","uf","neighborhood","lat","lng","rooms","baths","parking","area","description"]){
   if(field(key))field(key).value=p[key]??""
  }
  photoUrls=Array.isArray(p.photos)?p.photos.slice():[];
@@ -67,6 +67,7 @@ async function load(){
  entries=data.items||[];
  render()
 }
+ImoveisEndereco.setup(form,{message:text=>h($("online-geo-status"),text)});
 $("online-new").addEventListener("click",()=>{reset();form.scrollIntoView({behavior:"smooth"})});
 $("locate-online").addEventListener("click",async()=>{
  const city=String(field("city").value||"").trim(),uf=field("uf").value;
@@ -74,13 +75,10 @@ $("locate-online").addEventListener("click",async()=>{
  const button=$("locate-online");button.disabled=true;
  h($("online-geo-status"),"Localizando centro aproximado da cidade...");
  try{
-  const params=new URLSearchParams({q:city+", "+states[uf]+", Brasil",countrycodes:"br",format:"json",limit:"1"});
-  const result=await fetch("https://nominatim.openstreetmap.org/search?"+params.toString(),{headers:{Accept:"application/json"}});
-  if(!result.ok)throw Error("Servico de localizacao indisponivel");
-  const points=await result.json();if(!points.length)throw Error("Cidade nao localizada. Verifique o nome ou marque coordenadas aproximadas.");
-  field("lat").value=(Math.round(Number(points[0].lat)*100)/100).toFixed(2);
-  field("lng").value=(Math.round(Number(points[0].lon)*100)/100).toFixed(2);
-  h($("online-geo-status"),"Centro aproximado encontrado. Confira as coordenadas antes de salvar.")
+  const found=await ImoveisEndereco.geocode(form);
+  field("lat").value=(Math.round(found.lat*100)/100).toFixed(2);
+  field("lng").value=(Math.round(found.lng*100)/100).toFixed(2);
+  h($("online-geo-status"),"Posição estimada: "+found.precision+". Confira as coordenadas aproximadas antes de salvar.");
  }catch(e){h($("online-geo-status"),e.message)}finally{button.disabled=false}
 });
 form.addEventListener("submit",async event=>{

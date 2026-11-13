@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="css/mapa.css">
 <script defer src="js/app.js"></script><script defer src="js/imoveis-core.js"></script>
-<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script defer src="js/mapa.js?v=2"></script>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script defer src="js/mapa.js?v=3"></script>
 </head><body class="dyn-map-body">
 <a class="skip" href="#main">Ir ao conteúdo</a>
 <div class="announcement">IMÓVEIS EM MOVIMENTO <span>— ENCONTRE SEU PRÓXIMO ENDEREÇO</span></div>
@@ -29,6 +29,7 @@
       <button type="button" data-category="casa" aria-pressed="false">⌂ CASAS</button>
       <button type="button" data-category="apartamento" aria-pressed="false">▥ APARTAMENTOS</button>
       <button type="button" data-category="premium" aria-pressed="false">★ ALTO PADRÃO</button>
+      <button type="button" data-category="favoritos" aria-pressed="false">♡ FAVORITOS</button>
     </div>
     <span class="dyn-category-note">SIMULAÇÃO · GUARULHOS/SP</span>
   </div>
@@ -40,6 +41,10 @@
         <div class="dyn-filter-columns">
           <label><span>ESTADO</span><select id="map-state"><option value="">Brasil inteiro</option></select></label>
           <label><span>ORDENAR POR</span><select id="map-sort"><option value="recent">Mais recentes</option><option value="asc">Menor valor</option><option value="desc">Maior valor</option></select></label>
+        </div>
+        <div class="dyn-filter-columns dyn-filter-extra">
+          <label><span>QUARTOS</span><select id="map-bedrooms"><option value="0">Qualquer quantidade</option><option value="1">1 ou mais</option><option value="2">2 ou mais</option><option value="3">3 ou mais</option><option value="4">4 ou mais</option></select></label>
+          <label><span>VALOR MÁXIMO</span><select id="map-max-price"><option value="0">Sem limite</option><option value="500000">Até R$ 500 mil</option><option value="750000">Até R$ 750 mil</option><option value="1000000">Até R$ 1 milhão</option><option value="1500000">Até R$ 1,5 milhão</option><option value="2000000">Até R$ 2 milhões</option></select></label>
         </div>
       </div>
       <div class="dyn-list-scroll" id="map-results" aria-live="polite"><p class="dyn-loading">Preparando catálogo...</p></div>

@@ -6,7 +6,10 @@ const norm=value=>String(value??"").normalize("NFD").replace(/[\u0300-\u036f]/g,
 const money=new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
 const coordinates=p=>{const lat=Number(p.lat),lng=Number(p.lng);return Number.isFinite(lat)&&Number.isFinite(lng)&&lat>=-34&&lat<=6&&lng>=-74&&lng<=-33&&Math.abs(lat)>.001&&Math.abs(lng)>.001?[lat,lng]:null};
 const coordsOf=p=>coordinates(p);
-const state=$("map-state"),search=$("map-query"),sort=$("map-sort"),list=$("map-results"),count=$("map-count");
+const favoriteKey="imoveis-em-movimento-favoritos-v1";
+const favorites=()=>{try{return new Set(JSON.parse(localStorage.getItem(favoriteKey)||"[]"))}catch{return new Set()}};
+function toggleFavorite(id){try{const set=favorites();if(set.has(id))set.delete(id);else set.add(id);localStorage.setItem(favoriteKey,JSON.stringify([...set]));render(false)}catch{}}
+const state=$("map-state"),search=$("map-query"),sort=$("map-sort"),bedrooms=$("map-bedrooms"),maxPrice=$("map-max-price"),list=$("map-results"),count=$("map-count");
 const categoryBtns=[...document.querySelectorAll("[data-category]")];
 const selection=$("map-selected"),selectionPhoto=$("map-selected-photo");
 const emptyOnMap=$("map-empty");
@@ -32,8 +35,11 @@ function filtered(){
   const q=norm(search.value);
   const found=properties.filter(p=>{
     if(state.value&&p.uf!==state.value)return false;
+    if(Number(bedrooms.value)>0&&Number(p.rooms||0)<Number(bedrooms.value))return false;
+    if(Number(maxPrice.value)>0&&(price(p)===null||price(p)>Number(maxPrice.value)))return false;
     if(q&&!norm([p.title,p.city,p.region,p.uf,p.type,p.tag].join(" ")).includes(q))return false;
     if(category==="premium")return premium(p);
+    if(category==="favoritos")return favorites().has(p.id);
     if(category==="casa")return norm(p.type).includes("casa");
     if(category==="apartamento")return norm(p.type).includes("apartamento")||norm(p.type).includes("cobertura");
     return true
@@ -76,7 +82,7 @@ function propertyCard(p,index){
   copy.append(loc,title,kind,value);
   select.append(media,copy);select.addEventListener("click",()=>selectProperty(p));
   const details=document.createElement("a");details.className="dyn-property-details";details.href="imovel.html?id="+encodeURIComponent(p.id);details.textContent="VER DETALHES DO IMÓVEL ↗";
-  article.append(select,details);return article
+  const fav=document.createElement("button");fav.type="button";fav.className="dyn-card-fav";const isFav=favorites().has(p.id);fav.textContent=isFav?"♥ SALVO":"♡ FAVORITAR";fav.setAttribute("aria-pressed",String(isFav));fav.setAttribute("aria-label",(isFav?"Remover dos favoritos: ":"Adicionar aos favoritos: ")+p.title);fav.addEventListener("click",()=>toggleFavorite(p.id));article.append(select,details,fav);return article
 }
 function render(focus=false){
   const matches=filtered();lastVisible=matches;
@@ -111,7 +117,7 @@ function render(focus=false){
   if(!matches.length){const card=document.createElement("div");card.className="dyn-empty-result";
     const icon=document.createElement("span");icon.textContent="⌂";
     const h=document.createElement("strong");h.textContent=properties.length?"Nenhum imóvel encontrado.":"Ainda não há imóveis no mapa.";
-    const p=document.createElement("p");p.textContent=properties.length?"Experimente outra categoria, estado ou busca.":"Cadastre um imóvel e indique sua cidade para ele aparecer aqui. Os anúncios de teste são sempre identificados como fictícios.";
+    const p=document.createElement("p");p.textContent=category==="favoritos"?"Clique em FAVORITAR em um imóvel da lista ou salve-o na página de detalhes.":properties.length?"Experimente outra categoria, estado ou busca.":"Cadastre um imóvel e indique sua cidade para ele aparecer aqui. Os anúncios de teste são sempre identificados como fictícios.";
     const a=document.createElement("a");a.href=properties.length?"imoveis.html":"cadastrar.html";a.textContent=properties.length?"VER VITRINE ↗":"CADASTRAR IMÓVEL ↗";
     card.append(icon,h,p,a);list.append(card);
   }
@@ -123,12 +129,12 @@ function render(focus=false){
 }
 $("map-selected-close").addEventListener("click",()=>{selection.hidden=true;list.querySelectorAll(".dyn-property-card").forEach(el=>el.classList.remove("is-selected"))});
 $("map-reset").addEventListener("click",()=>{
-  state.value="";search.value="";sort.value="recent";category="todos";
+  state.value="";search.value="";sort.value="recent";bedrooms.value="0";maxPrice.value="0";category="todos";
   categoryBtns.forEach(b=>{const on=b.dataset.category==="todos";b.classList.toggle("is-active",on);b.setAttribute("aria-pressed",String(on))});
   render(false);if(map)map.flyTo(countryCenter,countryZoom,{duration:.6})
 });
 categoryBtns.forEach(b=>b.addEventListener("click",()=>{category=b.dataset.category;categoryBtns.forEach(x=>{const on=x===b;x.classList.toggle("is-active",on);x.setAttribute("aria-pressed",String(on))});render(true)}));
-state.addEventListener("change",()=>render(true));search.addEventListener("input",()=>render(true));sort.addEventListener("change",()=>render(false));
+state.addEventListener("change",()=>render(true));search.addEventListener("input",()=>render(true));sort.addEventListener("change",()=>render(false));bedrooms.addEventListener("change",()=>render(true));maxPrice.addEventListener("change",()=>render(true));
 Promise.resolve(Imoveis.all()).then(data=>{
   properties=data.filter(p=>(!p.demo||p.testListing)&&coordsOf(p));
   $("total-homes").textContent=properties.length;
@@ -136,5 +142,5 @@ Promise.resolve(Imoveis.all()).then(data=>{
   $("total-cities").textContent=new Set(properties.map(p=>(p.uf||"")+"|"+(p.city||""))).size;
   render(true);
 }).catch(()=>{properties=[];count.textContent="CATÁLOGO INDISPONÍVEL";render(false)});
-window.addEventListener("resize",()=>{if(map)map.invalidateSize()});
+window.addEventListener("resize",()=>{if(map)map.invalidateSize()});window.addEventListener("storage",e=>{if(e.key===favoriteKey)render(false)});
 })();

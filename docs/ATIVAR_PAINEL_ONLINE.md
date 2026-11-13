@@ -46,3 +46,10 @@ Referências oficiais:
 - https://developers.cloudflare.com/pages/functions/
 - https://developers.cloudflare.com/pages/functions/bindings/
 - https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/
+
+## Cadastro por CEP (versão para demonstração)
+- `js/endereco.js` consulta ViaCEP quando são inseridos 8 dígitos. Preenche rua, bairro, cidade e UF; usuário confere número e complemento.
+- O botão "Localizar endereço" consulta o Nominatim sob ação explícita, tenta rua/bairro/cidade e salva apenas as **coordenadas arredondadas a duas casas** para o mapa.
+- Rua, número, complemento e CEP ficam em colunas **somente administrativas** no D1. A API pública `/api/properties` não serializa esses campos.
+- `schema.sql` contém as novas colunas `cep`, `street`, `number` e `complement` para instalações novas. Para D1 já existente, é necessária migração (não basta rodar CREATE TABLE IF NOT EXISTS).
+- ViaCEP e Nominatim exigem internet; CEP nem sempre identifica rua ou número e geocodificação não garante precisão. Confirme visualmente antes de salvar.

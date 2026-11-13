@@ -53,3 +53,14 @@
 .online-admin-footer-note{margin-top:25px;color:#66836f;font-size:12px;line-height:1.75}
 @media(max-width:920px){.online-admin-layout{grid-template-columns:1fr}.online-admin-title{display:block}.online-admin-label{display:inline-block;margin-top:20px}}
 @media(max-width:600px){.online-admin-main{padding-top:46px}.online-admin-stats{gap:7px}.online-admin-stats>div{padding:14px}.online-admin-stats strong{font-size:26px}.online-admin-stats span{font-size:8px}.online-admin-editor,.online-admin-list{padding:17px}.online-fields.three,.online-fields.four{grid-template-columns:repeat(2,minmax(0,1fr))}.online-fields.two{grid-template-columns:1fr}}
+
+/* Endereço administrativo e busca de CEP */
+.online-private-address{padding:19px;background:#f4f8f1;border:1px solid #dbe8d6;border-radius:15px;margin:14px 0}
+.online-private-address>strong{display:block;color:#2f603f;letter-spacing:.08em;font-size:11px;margin-bottom:13px}
+.online-private-address>label{display:flex;flex-direction:column;gap:7px;color:#49634c;font-size:11px;font-weight:800}
+.online-private-address>p{color:#65816d;font-size:11px;line-height:1.75;margin:13px 0 0}
+.online-cep-action{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:7px}
+.online-cep-action button{border:0;background:#1f573a;color:#fff;border-radius:9px;font-size:11px;font-weight:800;padding:12px 16px}
+.online-cep-action button:disabled{opacity:.55}
+.online-cep-action small{font-size:10px;color:#718874}
+@media(max-width:600px){.online-private-address{padding:12px}}

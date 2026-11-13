@@ -8,6 +8,8 @@ const str=(v,max=150)=>String(v??"").trim().slice(0,max);
 function validate(input){
   const title=str(input.title,100),type=str(input.type,20),purpose=str(input.purpose||"Venda",20),status=str(input.status||"draft",20);
   const city=str(input.city,80),uf=str(input.uf,2).toUpperCase(),neighborhood=str(input.neighborhood,80),description=str(input.description,3000);
+  const cep=str(input.cep,9).replace(/[^0-9]/g,""),street=str(input.street,120),number=str(input.number,20),complement=str(input.complement,120);
+  if(cep&&!/^[0-9]{8}$/.test(cep))throw Error("CEP inválido. Informe 8 dígitos.");
   const lat=Number(input.lat),lng=Number(input.lng);
   const price=input.price==null||input.price===""?null:Number(input.price);
   const photos=Array.isArray(input.photos)?input.photos:[];
@@ -19,7 +21,7 @@ function validate(input){
   if(!Number.isFinite(area)||area<0||area>1000000)throw Error("Area invalida.");
   if(photos.length>8||photos.some(p=>typeof p!=="string"||!ids.test(p)))throw Error("Fotografias devem ser enviadas ao armazenamento autorizado (maximo 8).");
   if(status==="published"&&!photos.length)throw Error("Para publicar, e necessario ter ao menos uma fotografia.");
-  return {title,type,purpose,status,price_cents:price===null?null:Math.round(price*100),city,uf,neighborhood,lat:Math.round(lat*100)/100,lng:Math.round(lng*100)/100,description,rooms,baths,parking,area,photos_json:JSON.stringify(photos)}
+  return {title,type,purpose,status,price_cents:price===null?null:Math.round(price*100),city,uf,neighborhood,cep,street,number,complement,lat:Math.round(lat*100)/100,lng:Math.round(lng*100)/100,description,rooms,baths,parking,area,photos_json:JSON.stringify(photos)}
 }
 export async function onRequest(context){
   const who=await authenticated(context);if(who.error)return who.error;
@@ -45,14 +47,14 @@ export async function onRequest(context){
     const p=validate(payload);
     if(method==="POST"){
       const id=crypto.randomUUID();
-      await DB.prepare("INSERT INTO properties (id,title,type,purpose,status,price_cents,city,uf,neighborhood,lat,lng,description,rooms,baths,parking,area,photos_json,created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
-        .bind(id,p.title,p.type,p.purpose,p.status,p.price_cents,p.city,p.uf,p.neighborhood,p.lat,p.lng,p.description,p.rooms,p.baths,p.parking,p.area,p.photos_json,who.email).run();
+      await DB.prepare("INSERT INTO properties (id,title,type,purpose,status,price_cents,city,uf,neighborhood,cep,street,number,complement,lat,lng,description,rooms,baths,parking,area,photos_json,created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+        .bind(id,p.title,p.type,p.purpose,p.status,p.price_cents,p.city,p.uf,p.neighborhood,p.cep,p.street,p.number,p.complement,p.lat,p.lng,p.description,p.rooms,p.baths,p.parking,p.area,p.photos_json,who.email).run();
       return json({ok:true,id,status:p.status},201);
     }
     const id=new URL(request.url).searchParams.get("id");
     if(!id||!/^[a-z0-9-]{8,80}$/i.test(id))return fail("Identificador invalido.",400);
-    const updated=await DB.prepare("UPDATE properties SET title=?,type=?,purpose=?,status=?,price_cents=?,city=?,uf=?,neighborhood=?,lat=?,lng=?,description=?,rooms=?,baths=?,parking=?,area=?,photos_json=?,updated_at=datetime('now') WHERE id=?")
-       .bind(p.title,p.type,p.purpose,p.status,p.price_cents,p.city,p.uf,p.neighborhood,p.lat,p.lng,p.description,p.rooms,p.baths,p.parking,p.area,p.photos_json,id).run();
+    const updated=await DB.prepare("UPDATE properties SET title=?,type=?,purpose=?,status=?,price_cents=?,city=?,uf=?,neighborhood=?,cep=?,street=?,number=?,complement=?,lat=?,lng=?,description=?,rooms=?,baths=?,parking=?,area=?,photos_json=?,updated_at=datetime('now') WHERE id=?")
+       .bind(p.title,p.type,p.purpose,p.status,p.price_cents,p.city,p.uf,p.neighborhood,p.cep,p.street,p.number,p.complement,p.lat,p.lng,p.description,p.rooms,p.baths,p.parking,p.area,p.photos_json,id).run();
     if(!updated.meta?.changes)return fail("Imovel nao encontrado.",404);
     return json({ok:true,id,status:p.status});
   }catch(e){

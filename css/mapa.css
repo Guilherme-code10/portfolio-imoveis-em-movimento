@@ -114,3 +114,13 @@
 
 /* Aviso visível se a base de mapas ficar indisponível */
 .dyn-map-warning{position:absolute;z-index:790;top:90px;left:50%;transform:translateX(-50%);width:min(470px,calc(100% - 40px));border:1px solid #e8c45b;border-radius:12px;background:#fff8df;box-shadow:0 8px 24px #30472c33;padding:14px 18px;font-size:12px;line-height:1.5;font-weight:700;color:#654812;text-align:center}
+
+/* Filtros avançados (quartos e valor) */
+.dyn-filter-extra{margin-top:9px}
+.dyn-filter-extra select{font-size:11px}
+@media(max-width:370px){.dyn-filter-columns{grid-template-columns:1fr}}
+
+/* Favoritos funcionais nos cards do catálogo */
+.dyn-card-fav{display:block;width:calc(100% - 24px);margin:0 12px 10px;background:#f6f8f1;border:1px solid #dce7d5;color:#47664e;border-radius:7px;font-size:10px;font-weight:800;padding:8px;letter-spacing:.08em}
+.dyn-card-fav[aria-pressed="true"]{background:#fff4d1;color:#926916;border-color:#efd083}
+.dyn-card-fav:hover{background:#e5eedf}

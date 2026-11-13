@@ -5,6 +5,26 @@ const id=new URLSearchParams(location.search).get("id")||"aurora";
 Promise.resolve(Imoveis.find(id)).then(p=>{if(!p){loading.textContent="Imóvel não encontrado neste navegador. Confira o endereço ou volte à vitrine.";return}
 section.hidden=false;loading.hidden=true;document.title=p.title+" | Imóveis em Movimento";$("detail-title").textContent=p.title;$("detail-region").textContent=p.region||"Apresentação do imóvel";$("detail-tag").textContent=p.tag||"IMÓVEL CADASTRADO";$("detail-status").textContent=p.testListing?"IMÓVEL FICTÍCIO · SIMULAÇÃO · NÃO ESTÁ À VENDA":p.online?"PUBLICADO NO PORTFÓLIO":p.demo?"DEMONSTRAÇÃO — NÃO ESTÁ À VENDA":"CADASTRO LOCAL — NÃO PUBLICADO ONLINE";$("detail-description").textContent=p.description||"Sem descrição cadastrada.";
 const srcOf=v=>{const u=Imoveis.urlOf(v);urls.push(u);return u};$("detail-cover").src=srcOf(p.photos[0]);$("detail-cover").alt=(p.testListing?"Imagem meramente ilustrativa do imóvel fictício ":"Fotografia principal de ")+p.title;
+const favoriteBtn=$("detail-favorite"),shareBtn=$("detail-share"),actionStatus=$("detail-action-status");
+const favKey="imoveis-em-movimento-favoritos-v1";
+const readFavorites=()=>{try{return JSON.parse(localStorage.getItem(favKey)||"[]").filter(x=>typeof x==="string")}catch{return []}};
+const syncFavorite=()=>{const has=readFavorites().includes(p.id);favoriteBtn.textContent=has?"♥ Remover dos favoritos":"♡ Salvar nos favoritos";favoriteBtn.setAttribute("aria-pressed",String(has))};
+syncFavorite();
+favoriteBtn.addEventListener("click",()=>{
+ try{
+   const current=new Set(readFavorites());if(current.has(p.id))current.delete(p.id);else current.add(p.id);
+   localStorage.setItem(favKey,JSON.stringify([...current]));syncFavorite();
+   actionStatus.textContent=current.has(p.id)?"Imóvel salvo neste navegador.":"Imóvel removido dos favoritos."
+ }catch{actionStatus.textContent="Não foi possível salvar o favorito neste dispositivo."}
+});
+shareBtn.addEventListener("click",async()=>{
+ const url=new URL("imovel.html?id="+encodeURIComponent(p.id),location.href).href;
+ try{
+   if(navigator.share){await navigator.share({title:p.title,text:"Veja este imóvel em Imóveis em Movimento"+(p.testListing?" (demonstração fictícia)":"")+".",url});actionStatus.textContent="Compartilhamento iniciado.";return}
+   if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url);actionStatus.textContent="Link copiado para compartilhar.";return}
+   prompt("Copie o link do imóvel:",url);actionStatus.textContent="Link pronto para compartilhar."
+ }catch(e){if(e.name!=="AbortError")actionStatus.textContent="Não foi possível compartilhar automaticamente. Copie o endereço do navegador."}
+});
 const stats=$("detail-stats");stats.replaceChildren();[["TIPO",p.type],["FINALIDADE",p.purpose||"Demonstração"],["VALOR",p.price&&(!p.demo||p.testListing)?Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0}).format(Number(p.price))+(p.testListing?" (fictício)":""):"Sob consulta"],["ÁREA",p.area&&p.area!=="—"?p.area+" m²":"Não informada"],["QUARTOS",p.rooms||"—"],["BANHEIROS",p.baths||"—"],["VAGAS",p.parking||"—"]].forEach(([a,b])=>{const d=document.createElement("div"),small=document.createElement("span"),strong=document.createElement("strong");small.textContent=a;strong.textContent=b||"—";d.append(small,strong);stats.append(d)});
 if(p.tourUrl){try{const u=new URL(p.tourUrl);if(u.protocol==="https:"&&u.hostname==="my.matterport.com"&&u.pathname==="/show/"&&/^[A-Za-z0-9]{11}$/.test(u.searchParams.get("m")||"")){const safe="https://my.matterport.com/show/?m="+u.searchParams.get("m");$("detail-tour").hidden=false;$("detail-tour-link").href=safe;$("detail-tour-start").addEventListener("click",()=>{$("detail-tour-iframe").src=safe+"&play=1";$("detail-tour-frame").hidden=false;$("detail-tour-start").hidden=true})}}catch{}}
 const gallery=$("detail-gallery");gallery.replaceChildren();p.photos.forEach((f,i)=>{const pic=document.createElement("img");pic.src=srcOf(f);pic.alt=(p.testListing?"Imagem ilustrativa ":"Foto ")+(i+1)+" de "+p.title;pic.loading=i?"lazy":"eager";gallery.append(pic)});

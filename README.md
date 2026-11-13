@@ -98,3 +98,10 @@ A navegação pública e os destaques deixaram de promover o `tour-virtual.html`
 - Novo `painel-online.html` e `js/painel-online.js`: cadastros em rascunho, publicação, arquivamento, edição e upload, mas a tela permanece bloqueada sem a infraestrutura configurada.
 - `js/imoveis-core.js`: consulta API pública de forma opcional para que, após ativação, os imóveis publicados sejam visíveis no mapa, nas listagens e nas páginas de detalhes. Mantém os oito imóveis fictícios para testes e o cadastro local anterior.
 - Instruções em `docs/ATIVAR_PAINEL_ONLINE.md`. Não colocar e-mails nem credenciais em controle de versão; preferir variáveis no painel Cloudflare. Sem validação de integração D1/R2, não dizer que há login ou publicação online funcionando.
+
+## 13/11/2026 — Preparação para reunião com cliente
+- Nova página `apresentacao.html` com roteiro guiado de navegação pelos recursos de demonstração.
+- Cadastro local `cadastrar.html` e painel online protegido `painel-online.html`: consulta ViaCEP, rua/número/complemento e localizador por endereço, bairro ou cidade. Posição pública aproximada, endereço detalhado reservado.
+- Mapa `mapa.html`: filtros de quartos e preço e lista de favoritos local; páginas individuais permitem favoritar e compartilhar link.
+- **Não confundir protótipo com operação online:** o login Access/D1/R2 ainda depende de configuração e testes integrados; contatos e agendamentos comerciais ainda precisam ser conectados.
+- Guia de apresentação e pré-reunião: `docs/ROTEIRO_REUNIAO.md`.
