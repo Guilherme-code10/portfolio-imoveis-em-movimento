@@ -1,0 +1,71 @@
+/* Identidade Imóveis em Movimento · mapa como protagonista
+   Referência de UX: categorias, marcadores e catálogo de imóveis do mercado de jogos.
+   Arte, logos e assets próprios. Não usa conteúdo de jogos. */
+:root{--dark:#113d2f;--green:#154734;--gold:#f5c64a;--sand:#eff0e8;--ink:#15372a;--line:#d6dfd2}
+body{background:#f8f9f4;color:#173c2d}
+.announcement{background:#09251e;color:#c9d7c8;font-weight:700;letter-spacing:.15em}
+.nav-shell{background:#103a2c;box-shadow:none;border-bottom:1px solid #39634b}
+.nav{height:80px}
+.nav .logo{color:#fbfff5;font-weight:800;letter-spacing:-.09em}
+.nav .logo span{color:#ffce52}
+.nav .logo small{color:#d7e2d8;letter-spacing:.14em}
+.nav-links{gap:23px;font-size:12px}
+.nav-links a:not(.nav-cta){color:#e3eee2}
+.nav-links a:not(.nav-cta):hover,.nav-links a[aria-current="page"]{color:#ffcc4f}
+.nav-cta{background:#ffcc50!important;color:#123928!important;border-radius:9px;font-weight:800;letter-spacing:.025em;padding:14px 18px}
+.nav-cta:hover{background:#ffe18b!important}
+.menu-toggle{color:#fff}
+.btn{border-radius:9px;font-weight:800;letter-spacing:.045em;text-transform:uppercase;font-size:11px;min-height:53px}
+.btn-dark{background:#133e2d;border-color:#133e2d}
+.btn-dark:hover{background:#226747}
+.btn-light{background:#ffcb4f;border-color:#ffcb4f;color:#10372a;box-shadow:0 16px 36px #0b261b3b}
+.btn-light:hover{background:#f9d879}
+.eyebrow{color:#a28443;font-weight:800;letter-spacing:.17em}
+.hero{margin:0;min-height:min(750px,calc(100svh - 110px));border-radius:0 0 30px 30px;box-shadow:none}
+.hero-shade{background:linear-gradient(96deg,rgba(5,32,22,.94),rgba(4,29,22,.76) 52%,rgba(16,49,30,.18))}
+.hero .hero-visual{animation:heroMove 24s ease-in-out infinite alternate}
+.hero-inner{padding:92px 0 80px}
+.hero h1{font-size:clamp(55px,6.7vw,108px);font-weight:800;max-width:940px;letter-spacing:-.076em;line-height:1.04}
+.hero h1 em{font:italic 400 1.03em Georgia,serif;color:#ffce53}
+.hero .eyebrow.light{color:#f2cc62}
+.hero p{color:#e3eee6;max-width:615px;font-size:17px}
+.hero-note{margin-top:89px;font-size:10px;max-width:590px;letter-spacing:.13em;color:#e7eadf}
+.hero .home-hero-strip{display:flex;align-items:center;gap:10px;margin-top:26px;flex-wrap:wrap}
+.home-hero-strip span{border:1px solid #a0b29a85;background:#1f4b3766;color:#e8f0e5;font-weight:700;letter-spacing:.09em;padding:9px 13px;border-radius:6px;font-size:9px}
+.quick-paths{gap:14px;position:relative;z-index:1;margin-top:-29px!important;margin-bottom:70px!important}
+.quick-paths a{background:#143e2e;color:#e9f0e4;border:1px solid #2b6345;border-radius:14px;box-shadow:0 12px 40px #204a2d29;padding:24px 19px!important;min-height:80px;font-weight:800!important;letter-spacing:.015em}
+.quick-paths a:hover{background:#235b3d;transform:translateY(-4px)}
+.quick-paths a span{color:#ffd66e}
+.home-map-banner{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:30px;background:#ffce50;border:1px solid #dcae31;border-radius:22px;padding:32px 40px;margin-bottom:45px}
+.home-map-banner small{display:block;font-size:10px;letter-spacing:.16em;font-weight:800;color:#3a543b;margin-bottom:8px}
+.home-map-banner h2{font:800 clamp(25px,3.3vw,43px)/1.1 Manrope,sans-serif;letter-spacing:-.065em;margin:0 0 9px;color:#133c2f}
+.home-map-banner p{font-size:13px;margin:0;color:#425b43;line-height:1.65}
+.home-map-banner a{display:inline-flex;align-items:center;gap:28px;border-radius:10px;background:#153f2f;color:#fff;font-size:11px;font-weight:800;letter-spacing:.055em;white-space:nowrap;padding:18px 22px;box-shadow:0 8px 26px #2d4b2433}
+.home-map-banner a:hover{background:#236044}
+.section-intro{padding-top:85px}
+.intro-counters strong{color:#b38f44;font-weight:700}
+.showcase{background:#f0f1e9;border-radius:30px 30px 0 0}
+.section-heading h2 em,.section-intro h2 em,.invitation h2 em{color:#987f43}
+.project-image{border-radius:18px}
+.project-label{border-radius:7px;background:#ffce51;color:#19422e;font-weight:800}
+.project-meta h3{font-weight:800}
+.round-arrow{background:#153f2e;color:#fff}
+.round-arrow:hover{background:#246345;color:#fff}
+.page-hero{background:linear-gradient(130deg,#f3f5ee,#e3eade);border-radius:0 0 30px 30px}
+.page-hero h1{font-weight:800}
+.page-hero h1 em{color:#8c783d}
+.page-hero .btn-dark{border-radius:9px}
+.listing-card{border-radius:17px}
+.listing-card .listing-chip{background:#ffce50;color:#20452c;border-radius:7px}
+.listing-card .listing-content h3{font-weight:800}
+.admin-form,.admin-side{border-radius:19px}
+.admin-form .form-heading h2{font-weight:800}
+.admin-shell .admin-status{border-radius:14px}
+.nav-shell .nav-links.open{background:#123b2e;border:1px solid #31523a;box-shadow:0 18px 45px #092b2145}
+.nav-shell .nav-links.open>a:not(.nav-cta){color:#e6efe3}
+.nav-shell .nav-links.open>a[aria-current="page"]{color:#ffcf53}
+:focus-visible{outline:3px solid #ffcc50;outline-offset:3px}
+@media(max-width:1150px) and (min-width:691px){.nav-links{gap:11px;font-size:11px}.nav-cta{padding:11px 13px}.nav .logo small{margin-left:8px;font-size:8px}}
+@media(max-width:850px){.home-map-banner{grid-template-columns:1fr;gap:17px}}
+@media(max-width:690px){.hero{margin:0;min-height:600px;border-radius:0 0 20px 20px}.hero h1{font-size:clamp(48px,12vw,66px)}.hero-inner{padding:65px 0}.hero-note{margin-top:65px}.hero .home-hero-strip{gap:6px}.home-hero-strip span{padding:7px;font-size:8px}.quick-paths{margin-top:14px!important;margin-bottom:30px!important}.quick-paths a{min-height:64px;padding:17px!important}.home-map-banner{padding:24px;margin-bottom:15px}.home-map-banner a{white-space:normal;justify-content:space-between}.section-intro{padding-top:60px}.nav-shell .nav-links{top:74px}}
+@media(prefers-reduced-motion:reduce){.hero .hero-visual{animation:none}}

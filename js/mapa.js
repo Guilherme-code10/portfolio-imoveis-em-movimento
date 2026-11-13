@@ -2,46 +2,136 @@
 "use strict";
 const $=id=>document.getElementById(id);
 const states={AC:"Acre",AL:"Alagoas",AP:"Amapá",AM:"Amazonas",BA:"Bahia",CE:"Ceará",DF:"Distrito Federal",ES:"Espírito Santo",GO:"Goiás",MA:"Maranhão",MT:"Mato Grosso",MS:"Mato Grosso do Sul",MG:"Minas Gerais",PA:"Pará",PB:"Paraíba",PR:"Paraná",PE:"Pernambuco",PI:"Piauí",RJ:"Rio de Janeiro",RN:"Rio Grande do Norte",RS:"Rio Grande do Sul",RO:"Rondônia",RR:"Roraima",SC:"Santa Catarina",SP:"São Paulo",SE:"Sergipe",TO:"Tocantins"};
-const uf=$("map-state"),search=$("map-query"),result=$("map-results");
-for(const [key,value]of Object.entries(states)){const option=document.createElement("option");option.value=key;option.textContent=value+" ("+key+")";uf.append(option)}
-const norm=v=>String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
-const coords=p=>{const a=Number(p.lat),b=Number(p.lng);return Number.isFinite(a)&&Number.isFinite(b)&&a>=-34&&a<=6&&b>=-74&&b<=-33&&Math.abs(a)>0.001&&Math.abs(b)>0.001?[a,b]:null};
-let map,markers,records=[];
-if(typeof L==="undefined"){result.textContent="O mapa não carregou. Verifique sua conexão e atualize a página.";return}
-map=L.map("brasil-map",{scrollWheelZoom:false,minZoom:3,maxZoom:17}).setView([-14.2,-51.9],4);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:19}).addTo(map);
-markers=L.layerGroup().addTo(map);
-function render(){
- const visible=records.filter(p=>(!uf.value||p.uf===uf.value)&&norm([p.city,p.uf,p.region,p.title].join(" ")).includes(norm(search.value)));
- markers.clearLayers();result.replaceChildren();$("map-count").textContent=visible.length+" "+(visible.length===1?"imóvel":"imóveis");
- const allPoints=[],groups=new Map();
- for(const p of visible){
-   const row=document.createElement("article");row.className="map-result";
-   const heading=document.createElement("strong");heading.textContent=p.title;
-   const where=document.createElement("span");where.textContent=(p.city||"Cidade")+" · "+p.uf;
-   const link=document.createElement("a");link.href="imovel.html?id="+encodeURIComponent(p.id);link.textContent="Ver imóvel ↗";
-   row.append(heading,where,link);result.append(row);
-   const c=coords(p);if(!c)continue;
-   const key=c.map(x=>x.toFixed(4)).join(",");allPoints.push(c);
-   if(!groups.has(key))groups.set(key,[]);groups.get(key).push(p)
- }
- for(const [key,list]of groups){
-   const position=key.split(",").map(Number);
-   const dot=L.circleMarker(position,{radius:11,color:"#fff",weight:3,fillColor:"#b99460",fillOpacity:1}).addTo(markers);
-   const popup=document.createElement("div");popup.className="map-popup";
-   const title=document.createElement("strong");title.textContent=list[0].city+" / "+list[0].uf;popup.append(title);
-   for(const p of list){const a=document.createElement("a");a.href="imovel.html?id="+encodeURIComponent(p.id);a.textContent=p.title+" ↗";popup.append(a)}
-   dot.bindPopup(popup)
- }
- if(allPoints.length===1)map.setView(allPoints[0],10);
- else if(allPoints.length>1)map.fitBounds(allPoints,{padding:[40,40],maxZoom:11});
- else map.setView([-14.2,-51.9],4);
- if(!visible.length){const p=document.createElement("p");p.className="map-empty";p.textContent=records.length?"Nenhum imóvel encontrado com esses filtros.":"Ainda não existe nenhum imóvel com localização aproximada salvo neste navegador. Cadastre uma casa e marque a cidade no mapa.";result.append(p)}
- $("total-homes").textContent=records.length;
- $("total-states").textContent=new Set(records.map(p=>p.uf).filter(Boolean)).size;
- $("total-cities").textContent=new Set(records.map(p=>(p.uf||"")+"-"+(p.city||""))).size;
+const norm=value=>String(value??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+const money=new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+const coordinates=p=>{const lat=Number(p.lat),lng=Number(p.lng);return Number.isFinite(lat)&&Number.isFinite(lng)&&lat>=-34&&lat<=6&&lng>=-74&&lng<=-33&&Math.abs(lat)>.001&&Math.abs(lng)>.001?[lat,lng]:null};
+const coordsOf=p=>coordinates(p);
+const state=$("map-state"),search=$("map-query"),sort=$("map-sort"),list=$("map-results"),count=$("map-count");
+const categoryBtns=[...document.querySelectorAll("[data-category]")];
+const selection=$("map-selected"),selectionPhoto=$("map-selected-photo");
+const emptyOnMap=$("map-empty");
+const countryCenter=[-14.2,-51.9],countryZoom=4;
+let category="todos",properties=[],map=null,markerLayer=null,lastVisible=[];
+for(const [key,value] of Object.entries(states)){const opt=document.createElement("option");opt.value=key;opt.textContent=value+" · "+key;state.append(opt)}
+if(typeof L!=="undefined"){
+  map=L.map("brasil-map",{scrollWheelZoom:false,zoomControl:false,minZoom:3,maxZoom:17}).setView(countryCenter,countryZoom);
+  L.control.zoom({position:"bottomright"}).addTo(map);
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",{
+    subdomains:"abcd",maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  }).addTo(map);
+  markerLayer=L.layerGroup().addTo(map);
+}else{
+  const target=$("brasil-map");target.textContent="Não foi possível carregar o mapa. Verifique sua conexão.";target.classList.add("dyn-map-offline")
 }
-Imoveis.all().then(data=>{records=data.filter(p=>!p.demo&&coords(p));render()}).catch(()=>{records=[];render()});
-uf.addEventListener("change",render);search.addEventListener("input",render);
-$("map-reset").addEventListener("click",()=>{uf.value="";search.value="";render()});
+const price=p=>{const n=Number(p.price);return p.price!==undefined&&p.price!==""&&Number.isFinite(n)&&n>0?n:null};
+function premium(p){return norm(p.tag).includes("alto padrao")||norm(p.tag).includes("premium")||norm(p.tag).includes("luxo")||(norm(p.purpose)!=="locacao"&&price(p)!==null&&price(p)>=1000000)}
+function filtered(){
+  const q=norm(search.value);
+  const found=properties.filter(p=>{
+    if(state.value&&p.uf!==state.value)return false;
+    if(q&&!norm([p.title,p.city,p.region,p.uf,p.type,p.tag].join(" ")).includes(q))return false;
+    if(category==="premium")return premium(p);
+    if(category==="casa")return norm(p.type).includes("casa");
+    if(category==="apartamento")return norm(p.type).includes("apartamento")||norm(p.type).includes("cobertura");
+    return true
+  });
+  if(sort.value==="asc")found.sort((a,b)=>(price(a)??Infinity)-(price(b)??Infinity));
+  else if(sort.value==="desc")found.sort((a,b)=>(price(b)??-1)-(price(a)??-1));
+  else found.sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0));
+  return found
+}
+function selectProperty(p,focus=true){
+  selection.hidden=false;emptyOnMap.hidden=true;
+  $("map-selected-tag").textContent=(p.type||"IMÓVEL").toUpperCase()+" · "+(p.purpose||"CONSULTAR").toUpperCase();
+  $("map-selected-title").textContent=p.title;
+  $("map-selected-region").textContent=[p.city,p.uf].filter(Boolean).join(" · ");
+  $("map-selected-price").textContent=price(p)!==null?money.format(price(p)):"VALOR SOB CONSULTA";
+  $("map-selected-link").href="imovel.html?id="+encodeURIComponent(p.id);
+  if(p.photos&&p.photos[0]){
+    selectionPhoto.hidden=false;selectionPhoto.src=Imoveis.urlOf(p.photos[0]);selectionPhoto.alt="Foto de "+p.title;
+    selectionPhoto.onerror=()=>{selectionPhoto.hidden=true}
+  }else{selectionPhoto.hidden=true;selectionPhoto.removeAttribute("src")}
+  list.querySelectorAll(".dyn-property-card").forEach(card=>card.classList.toggle("is-selected",card.dataset.id===p.id));
+  const latlng=coordsOf(p);
+  if(map&&latlng&&focus)map.flyTo(latlng,Math.max(map.getZoom(),10),{duration:.8})
+}
+function propertyCard(p,index){
+  const article=document.createElement("article");article.className="dyn-property-card";article.dataset.id=p.id;
+  const select=document.createElement("button");select.className="dyn-property-select";select.type="button";select.setAttribute("aria-label","Mostrar "+p.title+" no mapa");
+  const media=document.createElement("span");media.className="dyn-property-media";
+  if(p.photos&&p.photos[0]){
+    const image=document.createElement("img");image.loading=index<3?"eager":"lazy";
+    image.alt="Imagem do imóvel "+p.title;image.src=Imoveis.urlOf(p.photos[0]);media.append(image);
+  }else{media.textContent="⌂"}
+  const chip=document.createElement("span");chip.className="dyn-property-chip";chip.textContent=(p.purpose||"IMÓVEL").toUpperCase();
+  media.append(chip);
+  const copy=document.createElement("span");copy.className="dyn-property-copy";
+  const loc=document.createElement("span");loc.className="dyn-property-region";loc.textContent=(p.city||"Cidade")+" / "+(p.uf||"BR");
+  const title=document.createElement("strong");title.className="dyn-property-title";title.textContent=p.title;
+  const kind=document.createElement("span");kind.className="dyn-property-kind";kind.textContent=(p.type||"Imóvel")+(p.rooms?" · "+p.rooms+" quartos":"");
+  const value=document.createElement("span");value.className="dyn-property-price";value.textContent=price(p)!==null?money.format(price(p)):"Sob consulta";
+  copy.append(loc,title,kind,value);
+  select.append(media,copy);select.addEventListener("click",()=>selectProperty(p));
+  const details=document.createElement("a");details.className="dyn-property-details";details.href="imovel.html?id="+encodeURIComponent(p.id);details.textContent="VER DETALHES DO IMÓVEL ↗";
+  article.append(select,details);return article
+}
+function render(focus=false){
+  const matches=filtered();lastVisible=matches;
+  count.textContent=matches.length+" "+(matches.length===1?"IMÓVEL ENCONTRADO":"IMÓVEIS ENCONTRADOS");
+  selection.hidden=true;list.replaceChildren();
+  if(markerLayer)markerLayer.clearLayers();
+  const groups=new Map(),points=[];
+  for(const [index,p] of matches.entries()){
+    list.append(propertyCard(p,index));
+    const c=coordsOf(p);if(!c)continue;points.push(c);
+    const key=c.map(n=>n.toFixed(3)).join(",");
+    if(!groups.has(key))groups.set(key,[]);
+    groups.get(key).push(p)
+  }
+  for(const [key,items] of groups){
+    if(!map||!markerLayer)break;
+    const c=key.split(",").map(Number),many=items.length>1;
+    const icon=L.divIcon({className:"dyn-leaflet-marker",html:'<div class="dyn-house-pin"><span aria-hidden="true">'+(many?items.length:"⌂")+'</span></div>',iconSize:[46,52],iconAnchor:[23,45],popupAnchor:[0,-44]});
+    const marker=L.marker(c,{icon,title:many?items.length+" imóveis em "+items[0].city:items[0].title,keyboard:true});
+    marker.addTo(markerLayer);
+    marker.on("click",()=>{
+      selectProperty(items[0],false);
+      if(items.length>1){
+        const sub=document.createElement("div");sub.className="dyn-group-popup";
+        const h=document.createElement("strong");h.textContent=items.length+" imóveis em "+items[0].city;sub.append(h);
+        for(const item of items){const b=document.createElement("button");b.type="button";b.textContent=item.title+" ↗";b.addEventListener("click",()=>{selectProperty(item,false);map.closePopup()});sub.append(b)}
+        marker.bindPopup(sub).openPopup()
+      }
+    })
+  }
+  emptyOnMap.hidden=matches.length!==0 || properties.length!==0;
+  if(!matches.length){const card=document.createElement("div");card.className="dyn-empty-result";
+    const icon=document.createElement("span");icon.textContent="⌂";
+    const h=document.createElement("strong");h.textContent=properties.length?"Nenhum imóvel encontrado.":"Ainda não há imóveis no mapa.";
+    const p=document.createElement("p");p.textContent=properties.length?"Experimente outra categoria, estado ou busca.":"Cadastre um imóvel real e indique sua cidade para ele aparecer aqui. As casas fictícias não ganham pontos inventados.";
+    const a=document.createElement("a");a.href=properties.length?"imoveis.html":"cadastrar.html";a.textContent=properties.length?"VER VITRINE ↗":"CADASTRAR IMÓVEL ↗";
+    card.append(icon,h,p,a);list.append(card);
+  }
+  if(map&&focus){
+    if(points.length>1)map.fitBounds(points,{padding:[55,55],maxZoom:10,animate:true});
+    else if(points.length===1)map.flyTo(points[0],10,{duration:.6});
+    else map.flyTo(countryCenter,countryZoom,{duration:.6})
+  }
+}
+$("map-selected-close").addEventListener("click",()=>{selection.hidden=true;list.querySelectorAll(".dyn-property-card").forEach(el=>el.classList.remove("is-selected"))});
+$("map-reset").addEventListener("click",()=>{
+  state.value="";search.value="";sort.value="recent";category="todos";
+  categoryBtns.forEach(b=>{const on=b.dataset.category==="todos";b.classList.toggle("is-active",on);b.setAttribute("aria-pressed",String(on))});
+  render(false);if(map)map.flyTo(countryCenter,countryZoom,{duration:.6})
+});
+categoryBtns.forEach(b=>b.addEventListener("click",()=>{category=b.dataset.category;categoryBtns.forEach(x=>{const on=x===b;x.classList.toggle("is-active",on);x.setAttribute("aria-pressed",String(on))});render(true)}));
+state.addEventListener("change",()=>render(true));search.addEventListener("input",()=>render(true));sort.addEventListener("change",()=>render(false));
+Promise.resolve(Imoveis.all()).then(data=>{
+  properties=data.filter(p=>!p.demo&&coordsOf(p));
+  $("total-homes").textContent=properties.length;
+  $("total-states").textContent=new Set(properties.map(p=>p.uf).filter(Boolean)).size;
+  $("total-cities").textContent=new Set(properties.map(p=>(p.uf||"")+"|"+(p.city||""))).size;
+  render(false);
+}).catch(()=>{properties=[];count.textContent="CATÁLOGO INDISPONÍVEL";render(false)});
+window.addEventListener("resize",()=>{if(map)map.invalidateSize()});
 })();

@@ -73,3 +73,11 @@ A navegação pública e os destaques deixaram de promover o `tour-virtual.html`
 - `cadastrar.html`: cidade e UF obrigatórias; mapa para seleção aproximada da cidade e botão opcional de geocodificação via OpenStreetMap Nominatim. O cliente precisa clicar para consultar a cidade; portanto, evita buscas automáticas em massa. A posição é arredondada a duas casas decimais para indicar a região aproximada, nunca o endereço exato.
 - A lista nacional é **local ao navegador**. Não há login ou banco de dados remoto, e visitantes não enxergam os seus cadastros. A próxima fase é conectar Cloudflare D1 + R2 e Cloudflare Access. Não coloque uma senha no front-end nem crie um "login" simulado.
 - A aplicação usa bibliotecas externas Leaflet/OSM. Caso bloqueadas, o mapa exibirá mensagem de erro; o cadastro de imóvel continua funcionando sem localização.
+
+## 13 nov 2026 — redesign UX inspirada na navegação Dynasty 8 (GTA V)
+- **Identidade visual própria** (verde-floresta e amarelo) criada para Imóveis em Movimento, sem copiar logos, fotografias ou imagens do jogo. Referência apenas na organização e na interação (filtros de categoria + lista de imóveis + mapa com ícones).
+- `mapa.html` agora apresenta o mapa como protagonista: barra de categorias (Todos, Casas, Apartamentos, Alto padrão), catálogo lateral com foto e preço, filtro por cidade/estado, ordenação por preço e marcação de imóvel com destaque dentro do mapa.
+- `js/mapa.js` permanece ligado aos **imóveis reais cadastrados localmente** no IndexedDB, com coordenadas aproximadas. Dados fictícios nunca são inseridos para parecer imóveis de verdade. Se não há imóveis cadastrados, o estado vazio explica como iniciar.
+- `css/mapa.css` renovado; `css/realty-theme.css` atualiza visual de todas as páginas (home/galeria/admin/estúdio).
+- Página inicial muda o foco para descoberta no mapa, mantendo recursos demonstrativos de vídeo. O sistema continua sem login real e sem sincronização remota até integrar Cloudflare Access/D1/R2.
+- O mapa usa Leaflet e tiles CARTO (attribution OpenStreetMap / CARTO), carregados externamente.
