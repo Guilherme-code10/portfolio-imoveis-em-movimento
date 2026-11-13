@@ -13,7 +13,7 @@ function setPosition(pos,zoom=12){const [lat,lng]=pos;if(!bounds(pos)){status.te
 }
 if(typeof L!=="undefined"){
   map=L.map("admin-location-map",{scrollWheelZoom:false,minZoom:3}).setView([-14.2,-51.9],4);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:19}).addTo(map);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:19}).addTo(map);
   map.on("click",e=>setPosition([e.latlng.lat,e.latlng.lng],Math.max(9,map.getZoom())));
 }else{status.textContent="O mapa não carregou. Verifique sua conexão. Você poderá salvar o cadastro, mas ele não aparecerá no mapa nacional."}
 find.addEventListener("click",async()=>{

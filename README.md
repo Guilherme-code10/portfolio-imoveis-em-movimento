@@ -88,3 +88,7 @@ A navegação pública e os destaques deixaram de promover o `tour-virtual.html`
 - Preços, áreas, características e fotografias são **somente simulados/ilustrativos**. As fotografias são links externos do Unsplash e podem deixar de carregar; nenhuma foi associada como imagem real de uma propriedade existente.
 - `js/mapa.js` apresenta distintivos 'FICTÍCIO · TESTE', filtra as novas entradas e enquadra Guarulhos ao abrir. `js/imovel-page.js` exibe preço fictício e aviso de não estar à venda. Os exemplos não são editáveis pelo painel local (que mantém IndexedDB para cadastros separados).
 - Antes de lançar, remover ou ocultar esses anúncios de teste e trocar pelos cadastros compartilhados no backend autenticado.
+
+## 13 nov 2026 — correção dos tiles do mapa
+- As imagens de mapa do provedor CARTO passaram a mostrar "API KEY REQUIRED". Substituímos o provedor na tela de exploração pela camada padrão do OpenStreetMap em `https://tile.openstreetmap.org/{z}/{x}/{y}.png`, com atribuição. A tela de cadastro usa a mesma URL. Adicionamos aviso se a base falhar e versão nova ao script para evitar cache de navegador. A funcionalidade principal de filtros e marcadores permanece intacta.
+- Atenção: o servidor público do OpenStreetMap está sujeito a uma política de uso e não tem SLA para tráfego comercial. Para escalar o site, escolher um provedor contratado com disponibilidade e cache adequados.

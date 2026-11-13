@@ -16,9 +16,12 @@ for(const [key,value] of Object.entries(states)){const opt=document.createElemen
 if(typeof L!=="undefined"){
   map=L.map("brasil-map",{scrollWheelZoom:false,zoomControl:false,minZoom:3,maxZoom:17}).setView(countryCenter,countryZoom);
   L.control.zoom({position:"bottomright"}).addTo(map);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",{
-    subdomains:"abcd",maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  const mapTiles=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
+    maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
+  let loadedOneTile=false,failedTiles=0;
+  mapTiles.on("tileload",()=>{loadedOneTile=true;failedTiles=0;const notice=document.getElementById("map-tiles-warning");if(notice)notice.remove()});
+  mapTiles.on("tileerror",()=>{failedTiles++;if(!loadedOneTile&&failedTiles>=3&&!document.getElementById("map-tiles-warning")){const notice=document.createElement("div");notice.id="map-tiles-warning";notice.className="dyn-map-warning";notice.textContent="A base cartográfica não carregou. Verifique sua conexão ou tente atualizar esta página.";document.querySelector(".dyn-map-panel").append(notice)}});
   markerLayer=L.layerGroup().addTo(map);
 }else{
   const target=$("brasil-map");target.textContent="Não foi possível carregar o mapa. Verifique sua conexão.";target.classList.add("dyn-map-offline")
