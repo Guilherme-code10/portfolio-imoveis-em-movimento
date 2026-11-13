@@ -1,0 +1,27 @@
+name: Teste de navegacao no navegador
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar Playwright
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Testar site no Chromium
+        run: node tests/e2e.mjs
+      - name: Captura em caso de erro
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: captura-e2e-falha
+          path: e2e-falha.png
+          if-no-files-found: ignore
