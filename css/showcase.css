@@ -185,3 +185,13 @@
 .detail-tour-frame{aspect-ratio:16/9;background:#183b2c;border-radius:20px;overflow:hidden;box-shadow:0 13px 40px #142c241c}
 .detail-tour-frame iframe{width:100%;height:100%;border:0}
 @media(max-width:580px){.detail-tour-frame{aspect-ratio:4/5}}
+
+.cabral-feature{background:linear-gradient(120deg,#eff5ed,#faf9f4);border:1px solid #dce5d9;border-radius:25px;padding:30px 36px;display:flex;align-items:center;justify-content:space-between;gap:34px;margin-top:36px;margin-bottom:16px}
+.cabral-feature>div{max-width:760px}
+.cabral-feature span{color:#98764e;letter-spacing:.11em;font-size:10px;font-weight:700}
+.cabral-feature h2{font:600 clamp(24px,3vw,34px)/1.25 Manrope,sans-serif;letter-spacing:-.05em;margin:10px 0 7px}
+.cabral-feature h2 em{font:italic 400 1em Georgia,serif;color:#a07b4f}
+.cabral-feature p{font-size:13px;color:#69796b;line-height:1.7;margin:0}
+.cabral-feature .btn{white-space:nowrap}
+.cabral-feature-video{margin-top:45px;margin-bottom:0}
+@media(max-width:710px){.cabral-feature{padding:23px;flex-direction:column;align-items:flex-start;gap:20px}.cabral-feature .btn{width:100%;justify-content:center}.cabral-feature-video{margin-top:25px}}

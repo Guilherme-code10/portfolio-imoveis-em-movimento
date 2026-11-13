@@ -53,3 +53,11 @@ A demonstração principal em `tour-virtual.html` agora apresenta uma propriedad
 
 ## Link do tour Matterport no cadastro (modo local)
 O cadastro `cadastrar.html` agora aceita, opcionalmente, URL pública de modelo Matterport com hostname exato `my.matterport.com`, caminho `/show/` e ID alfanumérico de 11 caracteres. É guardada somente a URL no IndexedDB; a prévia no imóvel carrega o iframe após interação explícita. Links não autorizados não devem ser inseridos. O cadastro completo ainda depende de uma foto de capa autorizada.
+
+## Estudo de caso: Casa Cabral / Ponte Grande
+- Página `cabral-ponte-grande.html` — prévia audiovisual em HTML/CSS/JS de **20 segundos**, que usa uma única fotografia verificável do anúncio original e fatos conferidos. **Não é um arquivo MP4 nem um passeio 3D**.
+- Referência CA67890-CABU. Dados do anúncio consultado: 338m² anunciados, 2 quartos, 2 banheiros, 5 vagas, R$ 1.190.000 de preço de vitrine.
+- Fonte primária: https://www.cabralimobiliaria.com/imovel/casa-guarulhos-2-quartos/CA67890-CABU
+- Outra galeria do mesmo anúncio: https://www.chavesnamao.com.br/imovel/casa-a-venda-2-quartos-com-garagem-sp-guarulhos-ponte-grande-338m2-RS1190000/id-44616697/
+- Uma imagem da garagem é carregada diretamente do portal Chaves na Mão com crédito, sem repositório de cópias; o portal poderá bloquear o hotlink. Os direitos autorais pertencem aos titulares. Uso comercial e arquivo MP4 dependem de fotografias obtidas com permissão.
+- Para completar o vídeo real é necessário obter as imagens dos outros ambientes, autorização de uso e, para tour imersivo fiel, panoramas 360° ou escaneamento 3D.
