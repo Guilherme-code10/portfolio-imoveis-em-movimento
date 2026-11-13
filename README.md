@@ -92,3 +92,9 @@ A navegação pública e os destaques deixaram de promover o `tour-virtual.html`
 ## 13 nov 2026 — correção dos tiles do mapa
 - As imagens de mapa do provedor CARTO passaram a mostrar "API KEY REQUIRED". Substituímos o provedor na tela de exploração pela camada padrão do OpenStreetMap em `https://tile.openstreetmap.org/{z}/{x}/{y}.png`, com atribuição. A tela de cadastro usa a mesma URL. Adicionamos aviso se a base falhar e versão nova ao script para evitar cache de navegador. A funcionalidade principal de filtros e marcadores permanece intacta.
 - Atenção: o servidor público do OpenStreetMap está sujeito a uma política de uso e não tem SLA para tráfego comercial. Para escalar o site, escolher um provedor contratado com disponibilidade e cache adequados.
+
+## 13 nov 2026 — fundação online segura (ainda não ativada)
+- Foram criadas funções Cloudflare para API pública de imóveis publicados, API administrativa protegida por JWT Access validado criptograficamente e lista de e-mails autorizados, upload de imagens R2 e esquema de tabelas D1.
+- Novo `painel-online.html` e `js/painel-online.js`: cadastros em rascunho, publicação, arquivamento, edição e upload, mas a tela permanece bloqueada sem a infraestrutura configurada.
+- `js/imoveis-core.js`: consulta API pública de forma opcional para que, após ativação, os imóveis publicados sejam visíveis no mapa, nas listagens e nas páginas de detalhes. Mantém os oito imóveis fictícios para testes e o cadastro local anterior.
+- Instruções em `docs/ATIVAR_PAINEL_ONLINE.md`. Não colocar e-mails nem credenciais em controle de versão; preferir variáveis no painel Cloudflare. Sem validação de integração D1/R2, não dizer que há login ou publicação online funcionando.

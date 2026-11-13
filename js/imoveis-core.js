@@ -214,8 +214,20 @@ async function query(method,record){const db=await openDb();return new Promise((
 const blobUrls=new Set();
 function urlOf(v){if(typeof v==="string")return v;const u=URL.createObjectURL(v);blobUrls.add(u);return u}
 window.addEventListener("pagehide",()=>{blobUrls.forEach(x=>URL.revokeObjectURL(x));blobUrls.clear()});
-async function all(){const custom=await query("getAll").catch(()=>[]);return [...custom.sort((a,b)=>b.createdAt-a.createdAt),...guarulhosTests,...propertyDemo]}
-async function find(id){const example=[...guarulhosTests,...propertyDemo].find(x=>x.id===id);return example||await query("get",id)}
-function makeCard(p){const a=document.createElement("a");a.className="listing-card";a.href="imovel.html?id="+encodeURIComponent(p.id);a.innerHTML='<div class="listing-photo"><img alt="" loading="lazy"><span class="listing-chip"></span><span class="listing-icon" aria-hidden="true">↗</span></div><div class="listing-content"><div class="listing-eyebrow"></div><h3></h3><p></p><div class="listing-bottom"><span class="listing-type"></span><span>Ver detalhes ↗</span></div></div>';a.querySelector("img").src=urlOf(p.photos[0]);a.querySelector("img").alt=p.title;a.querySelector(".listing-chip").textContent=p.testListing?"FICTÍCIO · TESTE":p.demo?"DEMONSTRAÇÃO":"CADASTRO LOCAL";a.querySelector(".listing-eyebrow").textContent=p.tag||"IMÓVEL CADASTRADO";a.querySelector("h3").textContent=p.title;a.querySelector("p").textContent=p.region||"Localização não informada";a.querySelector(".listing-type").textContent=(p.type||"Imóvel")+(p.purpose&&(!p.demo||p.testListing)?" · "+p.purpose:"");if(p.price&&(!p.demo||p.testListing)){const price=document.createElement("strong");price.className="listing-price";price.textContent=Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0}).format(Number(p.price));a.querySelector(".listing-content>p").append(" · ",price,p.testListing?" (valor fictício)":"")}return a}
+function onlineItem(p){return {...p,online:true,demo:false,status:"published",tag:"PUBLICADO",region:[p.neighborhood,p.city+"/"+p.uf].filter(Boolean).join(", "),createdAt:Date.parse(p.updatedAt)||0,photos:Array.isArray(p.photos)?p.photos:[]}}
+async function publicOnline(){
+ try{const response=await fetch("/api/properties?limit=100",{cache:"no-store"});if(!response.ok)return [];const payload=await response.json();return Array.isArray(payload.items)?payload.items.filter(p=>Array.isArray(p.photos)&&p.photos.length>0).map(onlineItem):[]}catch{return []}
+}
+async function all(){
+ const [custom,online]=await Promise.all([query("getAll").catch(()=>[]),publicOnline()]);
+ const remoteIds=new Set(online.map(p=>p.id));
+ return [...online,...custom.filter(p=>!remoteIds.has(p.id)).sort((a,b)=>b.createdAt-a.createdAt),...guarulhosTests,...propertyDemo]
+}
+async function find(id){
+ const example=[...guarulhosTests,...propertyDemo].find(x=>x.id===id);if(example)return example;
+ const local=await query("get",id).catch(()=>null);if(local)return local;
+ try{const r=await fetch("/api/properties?id="+encodeURIComponent(id),{cache:"no-store"});if(!r.ok)return null;const payload=await r.json();return payload.item?onlineItem(payload.item):null}catch{return null}
+}
+function makeCard(p){const a=document.createElement("a");a.className="listing-card";a.href="imovel.html?id="+encodeURIComponent(p.id);a.innerHTML='<div class="listing-photo"><img alt="" loading="lazy"><span class="listing-chip"></span><span class="listing-icon" aria-hidden="true">↗</span></div><div class="listing-content"><div class="listing-eyebrow"></div><h3></h3><p></p><div class="listing-bottom"><span class="listing-type"></span><span>Ver detalhes ↗</span></div></div>';a.querySelector("img").src=urlOf(p.photos[0]);a.querySelector("img").alt=p.title;a.querySelector(".listing-chip").textContent=p.testListing?"FICTÍCIO · TESTE":p.online?"PUBLICADO":p.demo?"DEMONSTRAÇÃO":"CADASTRO LOCAL";a.querySelector(".listing-eyebrow").textContent=p.tag||"IMÓVEL CADASTRADO";a.querySelector("h3").textContent=p.title;a.querySelector("p").textContent=p.region||"Localização não informada";a.querySelector(".listing-type").textContent=(p.type||"Imóvel")+(p.purpose&&(!p.demo||p.testListing)?" · "+p.purpose:"");if(p.price&&(!p.demo||p.testListing)){const price=document.createElement("strong");price.className="listing-price";price.textContent=Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0}).format(Number(p.price));a.querySelector(".listing-content>p").append(" · ",price,p.testListing?" (valor fictício)":"")}return a}
 window.Imoveis={demo:[...guarulhosTests,...propertyDemo],test:guarulhosTests,all,find,save:p=>query("put",p),remove:id=>query("delete",id),urlOf,makeCard};
 })();

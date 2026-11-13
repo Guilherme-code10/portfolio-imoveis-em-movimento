@@ -1,0 +1,36 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#113d2f"><meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Central administrativa online — Imóveis em Movimento">
+<title>Central de Imóveis | Administração</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/showcase.css"><link rel="stylesheet" href="css/realty-theme.css"><link rel="stylesheet" href="css/admin-online.css">
+<script defer src="js/app.js"></script><script defer src="js/painel-online.js"></script>
+</head><body class="online-admin-body"><a class="skip" href="#main">Ir ao conteúdo</a>
+<div class="announcement">IMÓVEIS EM MOVIMENTO · CENTRAL ADMINISTRATIVA ONLINE</div>
+<header class="nav-shell"><div class="wrap nav"><a href="index.html" class="logo">GA<span>.</span><small>GESTÃO DE IMÓVEIS</small></a><nav class="nav-links always"><a href="index.html">Site</a><a href="mapa.html">Mapa</a><a href="imoveis.html">Imóveis</a></nav></div></header>
+<main id="main" class="online-admin-main wrap">
+<section class="online-admin-title"><div><div class="eyebrow">CONTROLE DE PUBLICAÇÃO / D1 + R2</div><h1>Central de <em>imóveis.</em></h1><p>Cadastre e publique imóveis com fotos e localização aproximada. O acesso exige autenticação da Cloudflare; nenhuma senha é armazenada neste site.</p></div><span class="online-admin-label" id="admin-session">VERIFICANDO ACESSO</span></section>
+<div id="admin-auth-message" class="online-admin-message" role="status" aria-live="polite">Validando as configurações do ambiente seguro...</div>
+<div id="admin-workspace" class="online-admin-workspace" hidden>
+ <div class="online-admin-stats"><div><span>IMÓVEIS NO BANCO</span><strong id="online-total">0</strong></div><div><span>PUBLICADOS</span><strong id="online-published">0</strong></div><div><span>RASCUNHOS</span><strong id="online-drafts">0</strong></div></div>
+ <div class="online-admin-layout">
+  <section class="online-admin-editor"><div class="online-admin-section-heading"><span>01 / EDITAR CADASTRO</span><h2 id="editor-heading">Novo imóvel</h2></div>
+   <form id="online-property-form">
+    <div class="online-fields two"><label>Nome do imóvel *<input required maxlength="100" name="title" placeholder="Ex.: Casa no Jardim Maia"></label><label>Tipo *<select name="type" required><option>Casa</option><option>Apartamento</option><option>Cobertura</option><option>Terreno</option><option>Outro</option></select></label></div>
+    <div class="online-fields three"><label>Finalidade<select name="purpose"><option>Venda</option><option>Locação</option><option>Temporada</option></select></label><label>Valor (R$)<input name="price" type="number" min="0" max="999999999" step="0.01" placeholder="650000"></label><label>Situação<select name="status"><option value="draft">Rascunho</option><option value="published">Publicado</option><option value="archived">Arquivado</option></select></label></div>
+    <div class="online-fields three"><label>Cidade *<input name="city" required maxlength="80" placeholder="Ex.: Guarulhos"></label><label>UF *<select name="uf" required><option value="">Selecione</option></select></label><label>Bairro<input name="neighborhood" maxlength="80" placeholder="Ex.: Jardim Maia"></label></div>
+    <div class="online-admin-geocode"><button type="button" id="locate-online">⌖ Localizar centro da cidade</button><span id="online-geo-status">Escolha a cidade e a UF para gerar um marcador aproximado no mapa.</span></div>
+    <div class="online-fields two"><label>Latitude aproximada *<input name="lat" required type="number" step="0.01" min="-34" max="6" placeholder="-23.45"></label><label>Longitude aproximada *<input name="lng" required type="number" step="0.01" min="-74" max="-33" placeholder="-46.53"></label></div>
+    <div class="online-fields four"><label>Quartos<input name="rooms" type="number" min="0" max="100" value="0"></label><label>Banheiros<input name="baths" type="number" min="0" max="100" value="0"></label><label>Vagas<input name="parking" type="number" min="0" max="100" value="0"></label><label>Área m²<input name="area" type="number" min="0" max="1000000" value="0"></label></div>
+    <label>Descrição<textarea name="description" rows="4" maxlength="3000" placeholder="Descreva somente as características reais do imóvel"></textarea></label>
+    <label>Fotografias (até 8, JPG/PNG/WebP — 8 MB cada)<input type="file" id="online-photos" accept="image/jpeg,image/png,image/webp" multiple></label>
+    <div id="online-photo-list" class="online-photo-list"></div>
+    <p class="online-help">Para publicar um imóvel, adicione pelo menos uma fotografia autorizada. A localização será arredondada para proteger a privacidade do proprietário.</p>
+    <div class="online-editor-actions"><button type="submit" class="btn btn-dark" id="online-save">Salvar imóvel ↗</button><button type="button" class="btn btn-outline" id="online-new">Novo cadastro</button></div>
+   </form>
+  </section>
+  <aside class="online-admin-list"><div class="online-admin-section-heading"><span>02 / MEU PORTFÓLIO</span><h2>Gerenciar imóveis</h2></div><div id="online-properties-list" aria-live="polite"></div></aside>
+ </div>
+</div>
+<div class="online-admin-footer-note">Este painel utiliza Cloudflare Access, D1 e R2 somente depois de configurados na sua conta. Os oito anúncios fictícios permanecem em uma camada separada de testes, não neste banco.</div>
+</main>
+<footer><div class="wrap footer-row"><a href="index.html" class="logo footer-logo">GA<span>.</span><small>IMÓVEIS EM MOVIMENTO</small></a><span>© <span data-year></span> Guilherme Augusto · Acesso administrativo restrito</span><a href="mapa.html">Voltar ao mapa ↗</a></div></footer></body></html>
