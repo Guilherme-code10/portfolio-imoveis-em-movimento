@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="css/mapa.css">
 <script defer src="js/app.js"></script><script defer src="js/imoveis-core.js"></script>
-<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script defer src="js/mapa.js?v=3"></script>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script defer src="js/mapa.js?v=4"></script>
 </head><body class="dyn-map-body">
 <a class="skip" href="#main">Ir ao conteúdo</a>
 <div class="announcement">IMÓVEIS EM MOVIMENTO <span>— ENCONTRE SEU PRÓXIMO ENDEREÇO</span></div>
@@ -53,7 +53,7 @@
     <section class="dyn-map-panel" aria-label="Mapa interativo do Brasil">
       <div class="dyn-map-hud"><div class="dyn-map-hud-title"><span class="dyn-status-dot"></span><div><strong>MAPA DE PROPRIEDADES</strong><small>BRASIL · EXPLORAÇÃO LIVRE</small></div></div><button id="map-reset" type="button">↻ VER TODO O BRASIL</button></div>
       <div id="brasil-map" role="region" aria-label="Mapa com marcadores dos imóveis cadastrados"></div>
-      <div class="dyn-map-bottom"><span>⌖ MARCADORES DE IMÓVEIS</span><span>ARRASTE · ZOOM · SELECIONE</span></div>
+      <div class="dyn-map-bottom"><span>🟡 IMÓVEIS NO MAPA</span><span class="dyn-selected-legend">🔵 IMÓVEL SELECIONADO</span></div>
       <div class="dyn-map-selection" id="map-selected" hidden>
         <button id="map-selected-close" class="dyn-selection-close" type="button" aria-label="Fechar imóvel selecionado">✕</button>
         <img id="map-selected-photo" src="" alt="" hidden>

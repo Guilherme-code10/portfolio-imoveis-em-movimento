@@ -14,7 +14,24 @@ const categoryBtns=[...document.querySelectorAll("[data-category]")];
 const selection=$("map-selected"),selectionPhoto=$("map-selected-photo");
 const emptyOnMap=$("map-empty");
 const countryCenter=[-14.2,-51.9],countryZoom=4;
-let category="todos",properties=[],map=null,markerLayer=null,lastVisible=[];
+let category="todos",properties=[],map=null,markerLayer=null,lastVisible=[],selectedPropertyId=null;
+const propertyMarkers=new Map();
+function updateSelectedMarkers(){
+  const uniqueMarkers=new Set(propertyMarkers.values());
+  const activeMarker=selectedPropertyId?propertyMarkers.get(selectedPropertyId):null;
+  for(const marker of uniqueMarkers){
+    const node=marker.getElement();if(!node)continue;
+    const isActive=marker===activeMarker;
+    node.classList.toggle("is-selected",isActive);
+    marker.setZIndexOffset(isActive?1000:0);
+  }
+}
+function clearSelection(){
+  selectedPropertyId=null;selection.hidden=true;
+  list.querySelectorAll(".dyn-property-card").forEach(card=>card.classList.remove("is-selected"));
+  list.querySelectorAll(".dyn-property-select").forEach(button=>button.setAttribute("aria-pressed","false"));
+  updateSelectedMarkers();
+}
 for(const [key,value] of Object.entries(states)){const opt=document.createElement("option");opt.value=key;opt.textContent=value+" · "+key;state.append(opt)}
 if(typeof L!=="undefined"){
   map=L.map("brasil-map",{scrollWheelZoom:false,zoomControl:false,minZoom:3,maxZoom:17}).setView(countryCenter,countryZoom);
@@ -50,6 +67,7 @@ function filtered(){
   return found
 }
 function selectProperty(p,focus=true){
+  selectedPropertyId=p.id;
   selection.hidden=false;emptyOnMap.hidden=true;
   $("map-selected-tag").textContent=p.testListing?"FICTÍCIO · TESTE":(p.type||"IMÓVEL").toUpperCase()+" · "+(p.purpose||"CONSULTAR").toUpperCase();
   $("map-selected-title").textContent=p.title;
@@ -60,13 +78,18 @@ function selectProperty(p,focus=true){
     selectionPhoto.hidden=false;selectionPhoto.src=Imoveis.urlOf(p.photos[0]);selectionPhoto.alt=(p.testListing?"Foto ilustrativa para o cadastro fictício ":"Foto de ")+p.title;
     selectionPhoto.onerror=()=>{selectionPhoto.hidden=true}
   }else{selectionPhoto.hidden=true;selectionPhoto.removeAttribute("src")}
-  list.querySelectorAll(".dyn-property-card").forEach(card=>card.classList.toggle("is-selected",card.dataset.id===p.id));
+  list.querySelectorAll(".dyn-property-card").forEach(card=>{
+    const active=card.dataset.id===p.id;
+    card.classList.toggle("is-selected",active);
+    card.querySelector(".dyn-property-select")?.setAttribute("aria-pressed",String(active));
+  });
+  updateSelectedMarkers();
   const latlng=coordsOf(p);
   if(map&&latlng&&focus)map.flyTo(latlng,Math.max(map.getZoom(),10),{duration:.8})
 }
 function propertyCard(p,index){
   const article=document.createElement("article");article.className="dyn-property-card";article.dataset.id=p.id;
-  const select=document.createElement("button");select.className="dyn-property-select";select.type="button";select.setAttribute("aria-label","Mostrar "+p.title+" no mapa");
+  const select=document.createElement("button");select.className="dyn-property-select";select.type="button";select.setAttribute("aria-pressed","false");select.setAttribute("aria-label","Mostrar "+p.title+" no mapa");
   const media=document.createElement("span");media.className="dyn-property-media";
   if(p.photos&&p.photos[0]){
     const image=document.createElement("img");image.loading=index<3?"eager":"lazy";
@@ -88,6 +111,7 @@ function render(focus=false){
   const matches=filtered();lastVisible=matches;
   count.textContent=matches.length+" "+(matches.length===1?"IMÓVEL ENCONTRADO":"IMÓVEIS ENCONTRADOS");
   selection.hidden=true;list.replaceChildren();
+  propertyMarkers.clear();
   if(markerLayer)markerLayer.clearLayers();
   const groups=new Map(),points=[];
   for(const [index,p] of matches.entries()){
@@ -103,6 +127,7 @@ function render(focus=false){
     const icon=L.divIcon({className:"dyn-leaflet-marker",html:'<div class="dyn-house-pin"><span aria-hidden="true">'+(many?items.length:"⌂")+'</span></div>',iconSize:[46,52],iconAnchor:[23,45],popupAnchor:[0,-44]});
     const marker=L.marker(c,{icon,title:many?items.length+" imóveis em "+items[0].city:items[0].title+(items[0].testListing?" (fictício)":""),keyboard:true});
     marker.addTo(markerLayer);
+    for(const item of items)propertyMarkers.set(item.id,marker);
     marker.on("click",()=>{
       selectProperty(items[0],false);
       if(items.length>1){
@@ -112,6 +137,11 @@ function render(focus=false){
         marker.bindPopup(sub).openPopup()
       }
     })
+  }
+  if(selectedPropertyId){
+    const current=matches.find(item=>item.id===selectedPropertyId);
+    if(current)selectProperty(current,false);
+    else clearSelection();
   }
   emptyOnMap.hidden=matches.length!==0 || properties.length!==0;
   if(!matches.length){const card=document.createElement("div");card.className="dyn-empty-result";
@@ -127,8 +157,9 @@ function render(focus=false){
     else map.flyTo(countryCenter,countryZoom,{duration:.6})
   }
 }
-$("map-selected-close").addEventListener("click",()=>{selection.hidden=true;list.querySelectorAll(".dyn-property-card").forEach(el=>el.classList.remove("is-selected"))});
+$("map-selected-close").addEventListener("click",clearSelection);
 $("map-reset").addEventListener("click",()=>{
+  clearSelection();
   state.value="";search.value="";sort.value="recent";bedrooms.value="0";maxPrice.value="0";category="todos";
   categoryBtns.forEach(b=>{const on=b.dataset.category==="todos";b.classList.toggle("is-active",on);b.setAttribute("aria-pressed",String(on))});
   render(false);if(map)map.flyTo(countryCenter,countryZoom,{duration:.6})

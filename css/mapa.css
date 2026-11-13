@@ -124,3 +124,17 @@
 .dyn-card-fav{display:block;width:calc(100% - 24px);margin:0 12px 10px;background:#f6f8f1;border:1px solid #dce7d5;color:#47664e;border-radius:7px;font-size:10px;font-weight:800;padding:8px;letter-spacing:.08em}
 .dyn-card-fav[aria-pressed="true"]{background:#fff4d1;color:#926916;border-color:#efd083}
 .dyn-card-fav:hover{background:#e5eedf}
+
+/* Diferenciar a casa escolhida: marcador azul, os demais continuam amarelos */
+.dyn-leaflet-marker .dyn-house-pin{transition:background-color .18s,color .18s,box-shadow .18s,transform .18s}
+.dyn-leaflet-marker.is-selected .dyn-house-pin,
+.dyn-leaflet-marker.is-selected:hover .dyn-house-pin{
+  background:#176ddb;color:#fff;border-color:#fff;
+  transform:rotate(0deg) scale(1.17);
+  box-shadow:0 0 0 6px rgba(29,139,234,.38),0 10px 32px rgba(8,54,130,.65)
+}
+.dyn-property-card.is-selected{border:2px solid #217bdd;box-shadow:0 7px 27px rgba(28,104,189,.25)}
+.dyn-property-card.is-selected .dyn-property-select{background:#eff6ff}
+.dyn-property-card.is-selected .dyn-property-title{color:#155ba4}
+.dyn-map-bottom .dyn-selected-legend{background:#e4f0ff;color:#12559c;border-color:#b4d7ff}
+@media(prefers-reduced-motion:reduce){.dyn-leaflet-marker .dyn-house-pin{transition:none}}

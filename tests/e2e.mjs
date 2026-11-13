@@ -29,6 +29,14 @@ try{
  await page.goto(url+"/mapa.html",{waitUntil:"domcontentloaded"});
  await waitCount(8);
  assert.equal(await page.locator(".dyn-property-card").count(),8);
+ await page.locator(".dyn-property-card").first().locator(".dyn-property-select").click();
+ assert.equal(await page.locator(".dyn-leaflet-marker.is-selected").count(),1,"Ao selecionar, exatamente um marcador deve ficar azul");
+ assert.equal(await page.locator(".dyn-property-card.is-selected").count(),1,"O card selecionado deve acompanhar o marcador");
+ await page.locator(".dyn-property-card").nth(1).locator(".dyn-property-select").click();
+ assert.equal(await page.locator(".dyn-leaflet-marker.is-selected").count(),1,"A seleção anterior deve voltar à cor padrão");
+ assert.equal(await page.locator(".dyn-property-card.is-selected").count(),1,"A seleção deve trocar de card");
+ await page.locator("#map-selected-close").click();
+ assert.equal(await page.locator(".dyn-leaflet-marker.is-selected").count(),0,"Ao fechar a ficha, nenhuma casa deve permanecer azul");
  await page.locator('[data-category="casa"]').click();
  await waitCount(4);
  await page.locator(".dyn-property-card").first().locator(".dyn-card-fav").click();
