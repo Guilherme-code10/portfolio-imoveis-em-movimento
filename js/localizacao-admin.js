@@ -7,7 +7,7 @@ for(const [abbr,name]of Object.entries(states)){const opt=document.createElement
 const status=$("geo-status"),find=$("find-city");let map=null,marker=null;
 const bounds=([lat,lng])=>lat>=-34&&lat<=6&&lng>=-74&&lng<=-33;
 function setPosition(pos,zoom=12){const [lat,lng]=pos;if(!bounds(pos)){status.textContent="Escolha um ponto localizado no Brasil.";return}
-  field("lat").value=lat.toFixed(5);field("lng").value=lng.toFixed(5);
+  field("lat").value=lat.toFixed(2);field("lng").value=lng.toFixed(2);
   if(map){if(marker)marker.setLatLng(pos);else marker=L.circleMarker(pos,{radius:10,fillColor:"#b99460",fillOpacity:1,color:"#fff",weight:3}).addTo(map);map.setView(pos,zoom)}
   status.textContent="Localização aproximada marcada. Você pode clicar em outro ponto do mapa para ajustar."
 }

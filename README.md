@@ -70,6 +70,6 @@ A navegação pública e os destaques deixaram de promover o `tour-virtual.html`
 
 ## 13 nov 2026 — mapa do Brasil, protótipo local
 - `mapa.html`: mapa Leaflet com cartografia OpenStreetMap e filtros por UF, cidade e nome. Só mostra imóveis reais cadastrados no IndexedDB e com coordenadas válidas; nunca usa as três casas fictícias ou o tour externo como se fossem parte da carteira.
-- `cadastrar.html`: cidade e UF obrigatórias; mapa para seleção aproximada da cidade e botão opcional de geocodificação via OpenStreetMap Nominatim. O cliente precisa clicar para consultar a cidade; portanto, evita buscas automáticas em massa. A posição é arredondada a cinco casas decimais, mas o administrador deve marcar uma posição geral, não o endereço exato.
+- `cadastrar.html`: cidade e UF obrigatórias; mapa para seleção aproximada da cidade e botão opcional de geocodificação via OpenStreetMap Nominatim. O cliente precisa clicar para consultar a cidade; portanto, evita buscas automáticas em massa. A posição é arredondada a duas casas decimais para indicar a região aproximada, nunca o endereço exato.
 - A lista nacional é **local ao navegador**. Não há login ou banco de dados remoto, e visitantes não enxergam os seus cadastros. A próxima fase é conectar Cloudflare D1 + R2 e Cloudflare Access. Não coloque uma senha no front-end nem crie um "login" simulado.
 - A aplicação usa bibliotecas externas Leaflet/OSM. Caso bloqueadas, o mapa exibirá mensagem de erro; o cadastro de imóvel continua funcionando sem localização.
