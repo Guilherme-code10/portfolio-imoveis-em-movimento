@@ -67,3 +67,9 @@ A prévia anterior da Cabral, baseada numa única fotografia, foi removida dos d
 
 ## 13 nov 2026 — recurso experimental não divulgado
 A navegação pública e os destaques deixaram de promover o `tour-virtual.html`, porque o fluxo de captação de panorama e produção de tour próprio ainda não foi validado. A página de demonstração e seu código permanecem acessíveis por endereço direto somente para desenvolvimento. NÃO apresentar a demo Matterport de terceiros como serviço próprio. Próximo teste: captar de 2 a 4 panoramas 360° autorizados de uma única casa e verificar a transição entre cenas; depois desenvolver implantação em R2/D1 e habilitar o recurso ao público.
+
+## 13 nov 2026 — mapa do Brasil, protótipo local
+- `mapa.html`: mapa Leaflet com cartografia OpenStreetMap e filtros por UF, cidade e nome. Só mostra imóveis reais cadastrados no IndexedDB e com coordenadas válidas; nunca usa as três casas fictícias ou o tour externo como se fossem parte da carteira.
+- `cadastrar.html`: cidade e UF obrigatórias; mapa para seleção aproximada da cidade e botão opcional de geocodificação via OpenStreetMap Nominatim. O cliente precisa clicar para consultar a cidade; portanto, evita buscas automáticas em massa. A posição é arredondada a cinco casas decimais, mas o administrador deve marcar uma posição geral, não o endereço exato.
+- A lista nacional é **local ao navegador**. Não há login ou banco de dados remoto, e visitantes não enxergam os seus cadastros. A próxima fase é conectar Cloudflare D1 + R2 e Cloudflare Access. Não coloque uma senha no front-end nem crie um "login" simulado.
+- A aplicação usa bibliotecas externas Leaflet/OSM. Caso bloqueadas, o mapa exibirá mensagem de erro; o cadastro de imóvel continua funcionando sem localização.

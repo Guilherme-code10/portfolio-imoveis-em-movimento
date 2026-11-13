@@ -199,3 +199,10 @@
 /* Ajuste de fase: somente tres atalhos operacionais enquanto o tour imersivo nao estiver pronto */
 .quick-paths{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:780px){.quick-paths{grid-template-columns:1fr}}
+
+/* Mapa do Brasil: atalhos e navegacao estendida */
+.quick-paths{grid-template-columns:repeat(4,minmax(0,1fr))}
+.quick-paths a{padding:18px 15px;font-size:12px}
+@media(min-width:691px) and (max-width:1200px){.nav-links{gap:13px;font-size:11px}.nav .nav-cta{padding:10px 13px}}
+@media(max-width:1000px){.quick-paths{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.quick-paths{grid-template-columns:1fr}}
