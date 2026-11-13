@@ -42,13 +42,13 @@ function filtered(){
 }
 function selectProperty(p,focus=true){
   selection.hidden=false;emptyOnMap.hidden=true;
-  $("map-selected-tag").textContent=(p.type||"IMÓVEL").toUpperCase()+" · "+(p.purpose||"CONSULTAR").toUpperCase();
+  $("map-selected-tag").textContent=p.testListing?"FICTÍCIO · TESTE":(p.type||"IMÓVEL").toUpperCase()+" · "+(p.purpose||"CONSULTAR").toUpperCase();
   $("map-selected-title").textContent=p.title;
-  $("map-selected-region").textContent=[p.city,p.uf].filter(Boolean).join(" · ");
-  $("map-selected-price").textContent=price(p)!==null?money.format(price(p)):"VALOR SOB CONSULTA";
+  $("map-selected-region").textContent=[p.neighborhood||p.region,p.city,p.uf].filter(Boolean).join(" · ");
+  $("map-selected-price").textContent=price(p)!==null?money.format(price(p))+(p.testListing?" · SIMULADO":""):"VALOR SOB CONSULTA";
   $("map-selected-link").href="imovel.html?id="+encodeURIComponent(p.id);
   if(p.photos&&p.photos[0]){
-    selectionPhoto.hidden=false;selectionPhoto.src=Imoveis.urlOf(p.photos[0]);selectionPhoto.alt="Foto de "+p.title;
+    selectionPhoto.hidden=false;selectionPhoto.src=Imoveis.urlOf(p.photos[0]);selectionPhoto.alt=(p.testListing?"Foto ilustrativa para o cadastro fictício ":"Foto de ")+p.title;
     selectionPhoto.onerror=()=>{selectionPhoto.hidden=true}
   }else{selectionPhoto.hidden=true;selectionPhoto.removeAttribute("src")}
   list.querySelectorAll(".dyn-property-card").forEach(card=>card.classList.toggle("is-selected",card.dataset.id===p.id));
@@ -61,15 +61,15 @@ function propertyCard(p,index){
   const media=document.createElement("span");media.className="dyn-property-media";
   if(p.photos&&p.photos[0]){
     const image=document.createElement("img");image.loading=index<3?"eager":"lazy";
-    image.alt="Imagem do imóvel "+p.title;image.src=Imoveis.urlOf(p.photos[0]);media.append(image);
+    image.alt=(p.testListing?"Imagem ilustrativa para o imóvel fictício ":"Imagem do imóvel ")+p.title;image.src=Imoveis.urlOf(p.photos[0]);media.append(image);
   }else{media.textContent="⌂"}
-  const chip=document.createElement("span");chip.className="dyn-property-chip";chip.textContent=(p.purpose||"IMÓVEL").toUpperCase();
+  const chip=document.createElement("span");chip.className="dyn-property-chip";chip.textContent=p.testListing?"FICTÍCIO · TESTE":(p.purpose||"IMÓVEL").toUpperCase();
   media.append(chip);
   const copy=document.createElement("span");copy.className="dyn-property-copy";
-  const loc=document.createElement("span");loc.className="dyn-property-region";loc.textContent=(p.city||"Cidade")+" / "+(p.uf||"BR");
+  const loc=document.createElement("span");loc.className="dyn-property-region";loc.textContent=(p.neighborhood||p.city||"Bairro")+" / "+(p.city||"Cidade");
   const title=document.createElement("strong");title.className="dyn-property-title";title.textContent=p.title;
   const kind=document.createElement("span");kind.className="dyn-property-kind";kind.textContent=(p.type||"Imóvel")+(p.rooms?" · "+p.rooms+" quartos":"");
-  const value=document.createElement("span");value.className="dyn-property-price";value.textContent=price(p)!==null?money.format(price(p)):"Sob consulta";
+  const value=document.createElement("span");value.className="dyn-property-price";value.textContent=price(p)!==null?money.format(price(p))+(p.testListing?" · TESTE":""):"Sob consulta";
   copy.append(loc,title,kind,value);
   select.append(media,copy);select.addEventListener("click",()=>selectProperty(p));
   const details=document.createElement("a");details.className="dyn-property-details";details.href="imovel.html?id="+encodeURIComponent(p.id);details.textContent="VER DETALHES DO IMÓVEL ↗";
@@ -92,7 +92,7 @@ function render(focus=false){
     if(!map||!markerLayer)break;
     const c=key.split(",").map(Number),many=items.length>1;
     const icon=L.divIcon({className:"dyn-leaflet-marker",html:'<div class="dyn-house-pin"><span aria-hidden="true">'+(many?items.length:"⌂")+'</span></div>',iconSize:[46,52],iconAnchor:[23,45],popupAnchor:[0,-44]});
-    const marker=L.marker(c,{icon,title:many?items.length+" imóveis em "+items[0].city:items[0].title,keyboard:true});
+    const marker=L.marker(c,{icon,title:many?items.length+" imóveis em "+items[0].city:items[0].title+(items[0].testListing?" (fictício)":""),keyboard:true});
     marker.addTo(markerLayer);
     marker.on("click",()=>{
       selectProperty(items[0],false);
@@ -108,12 +108,12 @@ function render(focus=false){
   if(!matches.length){const card=document.createElement("div");card.className="dyn-empty-result";
     const icon=document.createElement("span");icon.textContent="⌂";
     const h=document.createElement("strong");h.textContent=properties.length?"Nenhum imóvel encontrado.":"Ainda não há imóveis no mapa.";
-    const p=document.createElement("p");p.textContent=properties.length?"Experimente outra categoria, estado ou busca.":"Cadastre um imóvel real e indique sua cidade para ele aparecer aqui. As casas fictícias não ganham pontos inventados.";
+    const p=document.createElement("p");p.textContent=properties.length?"Experimente outra categoria, estado ou busca.":"Cadastre um imóvel e indique sua cidade para ele aparecer aqui. Os anúncios de teste são sempre identificados como fictícios.";
     const a=document.createElement("a");a.href=properties.length?"imoveis.html":"cadastrar.html";a.textContent=properties.length?"VER VITRINE ↗":"CADASTRAR IMÓVEL ↗";
     card.append(icon,h,p,a);list.append(card);
   }
   if(map&&focus){
-    if(points.length>1)map.fitBounds(points,{padding:[55,55],maxZoom:10,animate:true});
+    if(points.length>1)map.fitBounds(points,{padding:[55,55],maxZoom:13,animate:true});
     else if(points.length===1)map.flyTo(points[0],10,{duration:.6});
     else map.flyTo(countryCenter,countryZoom,{duration:.6})
   }
@@ -127,11 +127,11 @@ $("map-reset").addEventListener("click",()=>{
 categoryBtns.forEach(b=>b.addEventListener("click",()=>{category=b.dataset.category;categoryBtns.forEach(x=>{const on=x===b;x.classList.toggle("is-active",on);x.setAttribute("aria-pressed",String(on))});render(true)}));
 state.addEventListener("change",()=>render(true));search.addEventListener("input",()=>render(true));sort.addEventListener("change",()=>render(false));
 Promise.resolve(Imoveis.all()).then(data=>{
-  properties=data.filter(p=>!p.demo&&coordsOf(p));
+  properties=data.filter(p=>(!p.demo||p.testListing)&&coordsOf(p));
   $("total-homes").textContent=properties.length;
   $("total-states").textContent=new Set(properties.map(p=>p.uf).filter(Boolean)).size;
   $("total-cities").textContent=new Set(properties.map(p=>(p.uf||"")+"|"+(p.city||""))).size;
-  render(false);
+  render(true);
 }).catch(()=>{properties=[];count.textContent="CATÁLOGO INDISPONÍVEL";render(false)});
 window.addEventListener("resize",()=>{if(map)map.invalidateSize()});
 })();

@@ -81,3 +81,10 @@ A navegação pública e os destaques deixaram de promover o `tour-virtual.html`
 - `css/mapa.css` renovado; `css/realty-theme.css` atualiza visual de todas as páginas (home/galeria/admin/estúdio).
 - Página inicial muda o foco para descoberta no mapa, mantendo recursos demonstrativos de vídeo. O sistema continua sem login real e sem sincronização remota até integrar Cloudflare Access/D1/R2.
 - O mapa usa Leaflet e tiles CARTO (attribution OpenStreetMap / CARTO), carregados externamente.
+
+## Catálogo fictício de Guarulhos — 13 nov 2026
+- Foram adicionados **8 anúncios totalmente fictícios** para testar a vitrine gamificada, com bairros reais mas coordenadas aproximadas: Jardim Maia, Centro, Vila Augusta, Bom Clima, Macedo, Picanço, Vila Galvão e Ponte Grande.
+- Fonte: `js/imoveis-core.js` (`guarulhosTests`), marcados com `demo:true,testListing:true`. Os oito aparecem no mapa e na vitrine em qualquer navegador; os 3 conceitos antigos continuam fora do mapa. Nenhum dado é de um imóvel real e nenhum anúncio corresponde à casa da Cabral.
+- Preços, áreas, características e fotografias são **somente simulados/ilustrativos**. As fotografias são links externos do Unsplash e podem deixar de carregar; nenhuma foi associada como imagem real de uma propriedade existente.
+- `js/mapa.js` apresenta distintivos 'FICTÍCIO · TESTE', filtra as novas entradas e enquadra Guarulhos ao abrir. `js/imovel-page.js` exibe preço fictício e aviso de não estar à venda. Os exemplos não são editáveis pelo painel local (que mantém IndexedDB para cadastros separados).
+- Antes de lançar, remover ou ocultar esses anúncios de teste e trocar pelos cadastros compartilhados no backend autenticado.
